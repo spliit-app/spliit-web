@@ -114,7 +114,7 @@ export default function HomePage() {
             <a
               className="underline"
               target="_blank"
-              href="https://github.com/scastiel/spliit2/graphs/contributors"
+              href="https://github.com/spliit-app/spliit/graphs/contributors"
             >
               contributors
             </a>
@@ -181,7 +181,7 @@ export default function HomePage() {
               <a
                 target="_blank"
                 rel="noreferrer"
-                href="https://github.com/scastiel/spliit2"
+                href="https://github.com/spliit-app/spliit"
               >
                 <Github className="w-4 h-4 mr-2" />
                 GitHub
