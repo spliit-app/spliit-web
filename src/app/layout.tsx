@@ -135,7 +135,7 @@ export default function RootLayout({
                   </a>{' '}
                   and{' '}
                   <a
-                    href="https://github.com/scastiel/spliit2/graphs/contributors"
+                    href="https://github.com/spliit-app/spliit/graphs/contributors"
                     target="_blank"
                     rel="noopener"
                   >

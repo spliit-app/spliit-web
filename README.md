@@ -1,4 +1,4 @@
-[<img alt="Spliit" height="60" src="https://github.com/scastiel/spliit2/blob/main/public/logo-with-text.png?raw=true" />](https://spliit.app)
+[<img alt="Spliit" height="60" src="https://github.com/spliit-app/spliit/blob/main/public/logo-with-text.png?raw=true" />](https://spliit.app)
 
 This is the repository for Spliit’s main instance available at [spliit.app](https://spliit.app).
 
