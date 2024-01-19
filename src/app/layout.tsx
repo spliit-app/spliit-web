@@ -13,6 +13,7 @@ import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
   title: {
     default: 'Spliit · Share Expenses with Friends & Family',
     template: '%s · Spliit',
