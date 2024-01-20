@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { useMediaQuery } from '@/lib/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Heart, HeartIcon, Loader2, MessageCircle } from 'lucide-react'
+import { Heart, HeartIcon, Loader2, MessageCircle, Wallet } from 'lucide-react'
 import { PropsWithChildren, ReactNode, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -226,8 +226,8 @@ function DonationForm({ donationUrl }: { donationUrl: string }) {
       <div className="prose prose-sm dark:prose-invert">
         <p>
           Spliit is offered for free, but costs money and energy. If you like
-          the app, you can choose to support it by buying me (Sebastien) a
-          coffee with a one-time small donation.
+          the app, you can choose to support it by sponsoring me (Sebastien) or
+          with a one-time small donation.
         </p>
         <p>By supporting Spliit:</p>
         <ul>
@@ -236,7 +236,7 @@ function DonationForm({ donationUrl }: { donationUrl: string }) {
             (currently ~$150/year).
           </li>
           <li>
-            You help us keeping the application{' '}
+            You help us keep the application{' '}
             <strong>free and without ads</strong>.
           </li>
           <li>
@@ -244,19 +244,19 @@ function DonationForm({ donationUrl }: { donationUrl: string }) {
             improve the application.
           </li>
         </ul>
-        <p>
-          You will be redirected to <strong>Stripe</strong>, our payment
-          provider, where you can choose an amount to donate and complete the
-          payment.
-        </p>
       </div>
-      <div className="text-center">
+      <div className="flex justify-center gap-2">
         <Button
           asChild
           className="bg-pink-700 hover:bg-pink-600 dark:bg-pink-500 dark:hover:bg-pink-600"
         >
+          <a href="https://github.com/sponsors/scastiel" target="_blank">
+            <Heart className="w-4 h-4 mr-2" /> Sponsor us (on GitHub)
+          </a>
+        </Button>
+        <Button asChild variant="secondary">
           <a href={donationUrl} target="_blank">
-            <Heart className="w-4 h-4 mr-2" /> Support us
+            <Wallet className="w-4 h-4 mr-2" /> Donate (via Stripe)
           </a>
         </Button>
       </div>
