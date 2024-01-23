@@ -1,3 +1,4 @@
+import { StatsDisplay } from '@/app/stats-display'
 import { Button } from '@/components/ui/button'
 import {
   BarChartHorizontalBig,
@@ -41,6 +42,9 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
+          <p className="mt-12 max-w-[42rem] leading-normal text-muted-foreground text-xl sm:text-2xl sm:leading-8">
+            <StatsDisplay />
+          </p>
         </div>
       </section>
 
