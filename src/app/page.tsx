@@ -1,4 +1,5 @@
 import { StatsDisplay } from '@/app/stats-display'
+import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   BarChartHorizontalBig,
@@ -22,6 +23,7 @@ export const dynamic = 'force-dynamic'
 export default function HomePage() {
   return (
     <main>
+      <TrackPage path="/" />
       <section className="py-16 md:py-24 lg:py-32">
         <div className="container flex max-w-screen-md flex-col items-center gap-4 text-center">
           <h1 className="!leading-none font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl landing-header py-2">

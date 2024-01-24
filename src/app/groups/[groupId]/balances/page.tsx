@@ -1,5 +1,6 @@
 import { BalancesList } from '@/app/groups/[groupId]/balances-list'
 import { ReimbursementList } from '@/app/groups/[groupId]/reimbursement-list'
+import { TrackPage } from '@/components/track-page'
 import {
   Card,
   CardContent,
@@ -30,6 +31,7 @@ export default async function GroupPage({
 
   return (
     <>
+      <TrackPage path={`/groups/${group.id}/balances`} />
       <Card className="mb-4">
         <CardHeader>
           <CardTitle>Balances</CardTitle>

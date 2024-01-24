@@ -1,4 +1,5 @@
 import { RecentGroupList } from '@/app/groups/recent-group-list'
+import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import { Metadata } from 'next'
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default async function GroupsPage() {
   return (
     <>
+      <TrackPage path="/groups" />
       <div className="flex justify-between items-center gap-4">
         <h1 className="font-bold text-2xl">
           <Link href="/groups">My groups</Link>

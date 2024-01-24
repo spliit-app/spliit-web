@@ -2,6 +2,7 @@
 import { AsyncButton } from '@/components/async-button'
 import { CategorySelector } from '@/components/category-selector'
 import { SubmitButton } from '@/components/submit-button'
+import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -112,10 +113,29 @@ export function ExpenseForm({
           splitMode: 'EVENLY',
         },
   })
+  const sendEvent = useAnalytics()
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((values) => onSubmit(values))}>
+      <form
+        onSubmit={form.handleSubmit(async (values) => {
+          if (expense) {
+            sendEvent(
+              {
+                event: 'expense: update',
+                props: { groupId: group.id, expenseId: expense.id },
+              },
+              `/groups/${group.id}/expenses`,
+            )
+          } else {
+            sendEvent(
+              { event: 'expense: create', props: { groupId: group.id } },
+              `/groups/${group.id}/expenses`,
+            )
+          }
+          await onSubmit(values)
+        })}
+      >
         <Card>
           <CardHeader>
             <CardTitle>
@@ -514,7 +534,16 @@ export function ExpenseForm({
               type="button"
               variant="destructive"
               loadingContent="Deleting…"
-              action={onDelete}
+              action={async () => {
+                sendEvent(
+                  {
+                    event: 'expense: delete',
+                    props: { groupId: group.id, expenseId: expense.id },
+                  },
+                  `/groups/${group.id}/expenses`,
+                )
+                await onDelete()
+              }}
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete

@@ -68,7 +68,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {env.PLAUSIBLE_DOMAIN && (
-        <PlausibleProvider domain={env.PLAUSIBLE_DOMAIN} trackOutboundLinks />
+        <PlausibleProvider
+          domain={env.PLAUSIBLE_DOMAIN}
+          trackOutboundLinks
+          manualPageviews
+        />
       )}
       <body className="pt-16 min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
         <ThemeProvider

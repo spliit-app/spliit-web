@@ -1,5 +1,7 @@
 import { ActiveUserModal } from '@/app/groups/[groupId]/expenses/active-user-modal'
 import { ExpenseList } from '@/app/groups/[groupId]/expenses/expense-list'
+import { ExportLink } from '@/app/groups/[groupId]/expenses/export-link'
+import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -30,6 +32,7 @@ export default async function GroupExpensesPage({
 
   return (
     <>
+      <TrackPage path={`/groups/${group.id}/expenses`} />
       <Card className="mb-4 rounded-none -mx-4 border-x-0 sm:border-x sm:rounded-lg sm:mx-0">
         <div className="flex flex-1">
           <CardHeader className="flex-1 p-4 sm:p-6">
@@ -40,12 +43,9 @@ export default async function GroupExpensesPage({
           </CardHeader>
           <CardHeader className="p-4 sm:p-6 flex flex-row space-y-0 gap-2">
             <Button variant="secondary" size="icon" asChild>
-              <Link
-                href={`/groups/${groupId}/expenses/export/json`}
-                target="_blank"
-              >
+              <ExportLink groupId={groupId}>
                 <Download className="w-4 h-4" />
-              </Link>
+              </ExportLink>
             </Button>
             <Button asChild size="icon">
               <Link href={`/groups/${groupId}/expenses/create`}>
