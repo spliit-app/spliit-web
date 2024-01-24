@@ -18,9 +18,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { useMediaQuery } from '@/lib/hooks'
+import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Heart, HeartIcon, Loader2, MessageCircle, Wallet } from 'lucide-react'
-import { PropsWithChildren, ReactNode, SetStateAction, useState } from 'react'
+import {
+  PropsWithChildren,
+  ReactNode,
+  Ref,
+  SetStateAction,
+  forwardRef,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -264,14 +272,21 @@ function DonationForm({ donationUrl }: { donationUrl: string }) {
   )
 }
 
-export function FeedbackButton({ ...props }: ButtonProps) {
-  return (
-    <Button
-      className="bg-pink-700 hover:bg-pink-600 dark:bg-pink-500 dark:hover:bg-pink-600 fixed right-0 bottom-4 rounded-r-none gap-2"
-      {...props}
-    >
-      <MessageCircle className="w-4 h-4" />
-      <HeartIcon className="w-4 h-4" />
-    </Button>
-  )
-}
+export const FeedbackButton = forwardRef(
+  ({ className, ...props }: ButtonProps, ref: Ref<HTMLButtonElement>) => {
+    return (
+      <Button
+        className={cn(
+          'bg-pink-700 hover:bg-pink-600 dark:bg-pink-500 dark:hover:bg-pink-600 fixed right-0 bottom-4 rounded-r-none gap-2',
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        <MessageCircle className="w-4 h-4" />
+        <HeartIcon className="w-4 h-4" />
+      </Button>
+    )
+  },
+)
+FeedbackButton.displayName = 'FeedbackButton'
