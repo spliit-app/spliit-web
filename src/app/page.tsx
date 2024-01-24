@@ -18,7 +18,7 @@ import Link from 'next/link'
 import { ReactNode } from 'react'
 
 // FIX for https://github.com/vercel/next.js/issues/58615
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export default function HomePage() {
   return (
