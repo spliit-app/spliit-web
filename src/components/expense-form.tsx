@@ -107,7 +107,11 @@ export function ExpenseForm({
           expenseDate: new Date(),
           amount: 0,
           category: 0, // category with Id 0 is General
-          paidFor: [],
+          // paid for all, split evenly
+          paidFor: group.participants.map(({ id }) => ({
+            participant: id,
+            shares: 1,
+          })),
           paidBy: getSelectedPayer(),
           isReimbursement: false,
           splitMode: 'EVENLY',
