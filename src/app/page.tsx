@@ -1,3 +1,4 @@
+import { Contributors } from '@/app/contributors'
 import { StatsDisplay } from '@/app/stats-display'
 import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
@@ -13,7 +14,6 @@ import {
   ShieldX,
   Users,
 } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
@@ -126,62 +126,9 @@ export default function HomePage() {
             </a>
             !
           </p>
-          <ul className="flex gap-4 mt-6">
-            {[
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/301948?s=120&v=4',
-                user: 'scastiel',
-                name: 'Sebastien Castiel',
-              },
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/3932568?s=120&v=4',
-                user: 'ChristopherJohnston',
-                name: 'Chris Johnston',
-              },
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/11523186?s=120&v=4',
-                user: 'acuteengle',
-                name: 'Brandon Eng',
-              },
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/24687853?s=120&v=4',
-                user: 'Max-TheCat',
-                name: 'Max',
-              },
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/10518723?s=120&v=4',
-                user: 'ankitbahl',
-                name: 'Ankit Bahl',
-              },
-              {
-                avatar:
-                  'https://avatars.githubusercontent.com/u/13032812?s=120&v=4',
-                user: '174n',
-                name: 'Ivan Alexandrov',
-              },
-            ].map((contributor) => (
-              <li key={contributor.user}>
-                <a
-                  href={`https://github.com/${contributor.user}`}
-                  target="_blank"
-                  rel="nofollow"
-                >
-                  <Image
-                    src={contributor.avatar}
-                    width={60}
-                    height={60}
-                    alt={contributor.user}
-                    className="rounded-full border hover:scale-110 transition-transform"
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-6">
+            <Contributors />
+          </div>
           <div className="mt-4 md:mt-6">
             <Button asChild variant="secondary" size="lg">
               <a
