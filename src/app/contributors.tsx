@@ -7,7 +7,6 @@ export async function Contributors() {
     owner: 'spliit-app',
     repo: 'spliit',
   })
-  console.log(contributors)
 
   return (
     <ul className="gap-4 grid grid-cols-4 sm:grid-cols-8">

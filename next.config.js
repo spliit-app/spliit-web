@@ -6,4 +6,5 @@ const nextConfig = {
 }
 
 const { withPlausibleProxy } = require('next-plausible')
-module.exports = withPlausibleProxy()(nextConfig)
+const { withAxiom } = require('next-axiom')
+module.exports = withAxiom(withPlausibleProxy()(nextConfig))

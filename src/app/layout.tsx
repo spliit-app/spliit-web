@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
 import type { Metadata, Viewport } from 'next'
+import { AxiomWebVitals } from 'next-axiom'
 import PlausibleProvider from 'next-plausible'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -75,6 +76,7 @@ export default function RootLayout({
           manualPageviews
         />
       )}
+      <AxiomWebVitals />
       <body className="pt-16 min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
         <ThemeProvider
           attribute="class"
