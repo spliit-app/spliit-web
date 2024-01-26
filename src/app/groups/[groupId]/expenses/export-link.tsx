@@ -16,6 +16,7 @@ export const ExportLink = function ExportLink({
       className={className}
       href={`/groups/${groupId}/expenses/export/json`}
       target="_blank"
+      prefetch={false}
       onClick={() => {
         sendEvent(
           { event: 'group: export expenses', props: { groupId } },
