@@ -1,6 +1,7 @@
 'use client'
 import { AsyncButton } from '@/components/async-button'
 import { CategorySelector } from '@/components/category-selector'
+import { ExpenseDocumentsInput } from '@/components/expense-documents-input'
 import { SubmitButton } from '@/components/submit-button'
 import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
@@ -84,6 +85,7 @@ export function ExpenseForm({
           })),
           splitMode: expense.splitMode,
           isReimbursement: expense.isReimbursement,
+          documents: expense.documents,
         }
       : searchParams.get('reimbursement')
       ? {
@@ -101,6 +103,7 @@ export function ExpenseForm({
           ],
           isReimbursement: true,
           splitMode: 'EVENLY',
+          documents: [],
         }
       : {
           title: '',
@@ -115,6 +118,7 @@ export function ExpenseForm({
           paidBy: getSelectedPayer(),
           isReimbursement: false,
           splitMode: 'EVENLY',
+          documents: [],
         },
   })
   const sendEvent = useAnalytics()
@@ -525,6 +529,31 @@ export function ExpenseForm({
             </Collapsible>
           </CardContent>
         </Card>
+
+        {process.env.NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS && (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle className="flex justify-between">
+                <span>Attach documents</span>
+              </CardTitle>
+              <CardDescription>
+                See and attach receipts to the expense.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="documents"
+                render={({ field }) => (
+                  <ExpenseDocumentsInput
+                    documents={field.value}
+                    updateDocuments={field.onChange}
+                  />
+                )}
+              />
+            </CardContent>
+          </Card>
+        )}
 
         <div className="flex mt-4 gap-2">
           <SubmitButton
