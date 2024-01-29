@@ -1,7 +1,8 @@
 'use client'
 
 import { usePlausible } from 'next-plausible'
-import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect } from 'react'
 
 type Event =
   | { event: 'pageview'; props: {} }
@@ -12,12 +13,29 @@ type Event =
   | { event: 'expense: delete'; props: { groupId: string; expenseId: string } }
   | { event: 'group: export expenses'; props: { groupId: string } }
 
-export function TrackPage({ path }: { path: string }) {
+type Props = {
+  path: string
+}
+
+export function TrackPage(props: Props) {
+  return (
+    <Suspense>
+      <TrackPage_ {...props} />
+    </Suspense>
+  )
+}
+
+function TrackPage_({ path }: Props) {
   const sendEvent = useAnalytics()
+  const searchParams = useSearchParams()
+  const ref = searchParams.get('ref')
 
   useEffect(() => {
-    sendEvent({ event: 'pageview', props: {} }, path)
-  }, [path, sendEvent])
+    sendEvent(
+      { event: 'pageview', props: {} },
+      `${path}${ref ? `?ref=${ref}` : ''}`,
+    )
+  }, [path, ref, sendEvent])
 
   return null
 }
