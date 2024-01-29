@@ -14,6 +14,10 @@ type Event =
   | { event: 'group: export expenses'; props: { groupId: string } }
   | { event: 'news: open menu'; props: {} }
   | { event: 'news: click news'; props: { news: string } }
+  | {
+      event: 'expense: attach document'
+      props: { groupId: string; expenseId: string | null }
+    }
 
 type Props = {
   path: string

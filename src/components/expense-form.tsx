@@ -548,6 +548,15 @@ export function ExpenseForm({
                   <ExpenseDocumentsInput
                     documents={field.value}
                     updateDocuments={field.onChange}
+                    onDocumentAttached={() => {
+                      sendEvent({
+                        event: 'expense: attach document',
+                        props: {
+                          groupId: group.id,
+                          expenseId: expense?.id ?? null,
+                        },
+                      })
+                    }}
                   />
                 )}
               />

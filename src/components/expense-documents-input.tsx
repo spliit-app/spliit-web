@@ -25,9 +25,14 @@ import { useEffect, useState } from 'react'
 type Props = {
   documents: ExpenseFormValues['documents']
   updateDocuments: (documents: ExpenseFormValues['documents']) => void
+  onDocumentAttached?: () => void
 }
 
-export function ExpenseDocumentsInput({ documents, updateDocuments }: Props) {
+export function ExpenseDocumentsInput({
+  documents,
+  updateDocuments,
+  onDocumentAttached,
+}: Props) {
   const [pending, setPending] = useState(false)
   const { FileInput, openFileDialog, uploadToS3 } = useS3Upload()
   const { toast } = useToast()
@@ -40,6 +45,7 @@ export function ExpenseDocumentsInput({ documents, updateDocuments }: Props) {
         if (!width || !height) throw new Error('Cannot get image dimensions')
         const { url } = await uploadToS3(file)
         updateDocuments([...documents, { id: randomId(), url, width, height }])
+        onDocumentAttached?.()
       } catch (err) {
         console.error(err)
         toast({
