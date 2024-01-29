@@ -1,4 +1,5 @@
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
+import { NewsButton } from '@/components/news-button'
 import { ProgressBar } from '@/components/progress-bar'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -112,6 +113,9 @@ export default function RootLayout({
                   >
                     <Link href="/groups">Groups</Link>
                   </Button>
+                </li>
+                <li>
+                  <NewsButton />
                 </li>
                 <li>
                   <ThemeToggle />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function useMediaQuery(query: string): boolean {
   const getMatches = (query: string): boolean => {
@@ -47,4 +47,32 @@ export function useBaseUrl() {
     setBaseUrl(window.location.origin)
   }, [])
   return baseUrl
+}
+
+export function useLocalStorageState<T>(
+  key: string,
+  defaultValue: T,
+): [T, (v: T) => void, boolean] {
+  const [value, _setValue] = useState(defaultValue)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem(key)
+    try {
+      _setValue(storedValue ? (JSON.parse(storedValue) as T) : defaultValue)
+    } catch (err) {
+      _setValue(defaultValue)
+    }
+    setLoaded(true)
+  }, [defaultValue, key])
+
+  const setValue = useCallback(
+    (value: T) => {
+      localStorage.setItem(key, JSON.stringify(value))
+      _setValue(value)
+    },
+    [key],
+  )
+
+  return [value, setValue, loaded]
 }

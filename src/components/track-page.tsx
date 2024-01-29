@@ -12,6 +12,8 @@ type Event =
   | { event: 'expense: update'; props: { groupId: string; expenseId: string } }
   | { event: 'expense: delete'; props: { groupId: string; expenseId: string } }
   | { event: 'group: export expenses'; props: { groupId: string } }
+  | { event: 'news: open menu'; props: {} }
+  | { event: 'news: click news'; props: { news: string } }
 
 type Props = {
   path: string
@@ -43,7 +45,7 @@ function TrackPage_({ path }: Props) {
 export function useAnalytics() {
   const plausible = usePlausible()
 
-  const sendEvent = ({ event, props }: Event, path: string) => {
+  const sendEvent = ({ event, props }: Event, path = '/') => {
     const url = `${window.location.origin}${path}`
     if (process.env.NODE_ENV !== 'production')
       console.log('Analytics event:', event, props, url)
