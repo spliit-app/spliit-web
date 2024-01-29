@@ -6,6 +6,7 @@ import {
   BarChartHorizontalBig,
   CircleDollarSign,
   Divide,
+  FileImage,
   FolderTree,
   Github,
   List,
@@ -77,6 +78,11 @@ export default function HomePage() {
               Icon={FolderTree}
               name="Categories"
               description="Assign categories to your expenses."
+            />
+            <Feature
+              Icon={FileImage}
+              name="Receipts"
+              description="Attach receipt images to expenses."
             />
             <Feature
               Icon={Divide}
