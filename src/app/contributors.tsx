@@ -9,11 +9,11 @@ export async function Contributors() {
   })
 
   return (
-    <ul className="gap-4 grid grid-cols-4 sm:grid-cols-8">
+    <ul style={{ textWrap: 'balance' } as any}>
       {contributors.map((contributor) =>
         contributor.avatar_url !== undefined &&
         contributor.login !== undefined ? (
-          <li key={contributor.login}>
+          <li key={contributor.login} className="inline-block px-1">
             <a href={contributor.html_url} target="_blank" rel="nofollow">
               <Image
                 src={contributor.avatar_url}
