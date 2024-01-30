@@ -9,6 +9,8 @@ type Event =
   | { event: 'group: create'; props: {} }
   | { event: 'group: update'; props: { groupId: string } }
   | { event: 'expense: create'; props: { groupId: string } }
+  | { event: 'expense: scan receipt'; props: { groupId: string } }
+  | { event: 'expense: create from receipt'; props: { groupId: string } }
   | { event: 'expense: update'; props: { groupId: string; expenseId: string } }
   | { event: 'expense: delete'; props: { groupId: string; expenseId: string } }
   | { event: 'group: export expenses'; props: { groupId: string } }
