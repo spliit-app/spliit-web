@@ -1,6 +1,7 @@
 import { Contributors } from '@/app/contributors'
 import { StatsDisplay } from '@/app/stats-display'
 import { TrackPage } from '@/components/track-page'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   BarChartHorizontalBig,
@@ -11,9 +12,9 @@ import {
   Github,
   List,
   LucideIcon,
-  Share,
   ShieldX,
   Users,
+  Wand2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { ReactNode } from 'react'
@@ -85,14 +86,15 @@ export default function HomePage() {
               description="Attach receipt images to expenses."
             />
             <Feature
+              Icon={Wand2}
+              name="AI Scan"
+              description="Scan receipts to create expenses faster."
+              beta
+            />
+            <Feature
               Icon={Divide}
               name="Advanced split"
               description="Split expenses by percentage, shares or amount."
-            />
-            <Feature
-              Icon={Share}
-              name="Share"
-              description="Send the group link to participants."
             />
             <Feature
               Icon={BarChartHorizontalBig}
@@ -157,13 +159,20 @@ function Feature({
   name,
   Icon,
   description,
+  beta = false,
 }: {
   name: ReactNode
   Icon: LucideIcon
   description: ReactNode
+  beta?: boolean
 }) {
   return (
-    <div className="bg-card border rounded-md p-4 flex flex-col gap-2">
+    <div className="bg-card border rounded-md p-4 flex flex-col gap-2 relative">
+      {beta && (
+        <Badge className="absolute top-4 right-4 bg-pink-700 hover:bg-pink-600 dark:bg-pink-500 dark:hover:bg-pink-600">
+          Beta
+        </Badge>
+      )}
       <Icon className="w-8 h-8" />
       <div>
         <strong>{name}</strong>
