@@ -1,3 +1,4 @@
+import { cached } from '@/app/cached-functions'
 import { ActiveUserModal } from '@/app/groups/[groupId]/expenses/active-user-modal'
 import { ExpenseList } from '@/app/groups/[groupId]/expenses/expense-list'
 import { ExportLink } from '@/app/groups/[groupId]/expenses/export-link'
@@ -11,12 +12,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getGroup, getGroupExpenses } from '@/lib/api'
+import { getGroupExpenses } from '@/lib/api'
 import { Download, Plus } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Expenses',
@@ -27,7 +30,7 @@ export default async function GroupExpensesPage({
 }: {
   params: { groupId: string }
 }) {
-  const group = await getGroup(groupId)
+  const group = await cached.getGroup(groupId)
   if (!group) notFound()
 
   return (
@@ -83,7 +86,7 @@ export default async function GroupExpensesPage({
 }
 
 async function Expenses({ groupId }: { groupId: string }) {
-  const group = await getGroup(groupId)
+  const group = await cached.getGroup(groupId)
   if (!group) notFound()
   const expenses = await getGroupExpenses(group.id)
 
