@@ -1,5 +1,6 @@
 import { cached } from '@/app/cached-functions'
 import { ActiveUserModal } from '@/app/groups/[groupId]/expenses/active-user-modal'
+import { CreateFromReceiptButton } from '@/app/groups/[groupId]/expenses/create-from-receipt-button'
 import { ExpenseList } from '@/app/groups/[groupId]/expenses/expense-list'
 import { ExportLink } from '@/app/groups/[groupId]/expenses/export-link'
 import { TrackPage } from '@/components/track-page'
@@ -12,7 +13,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getGroupExpenses } from '@/lib/api'
+import { getCategories, getGroupExpenses } from '@/lib/api'
+import { env } from '@/lib/env'
 import { Download, Plus } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -33,6 +35,8 @@ export default async function GroupExpensesPage({
   const group = await cached.getGroup(groupId)
   if (!group) notFound()
 
+  const categories = await getCategories()
+
   return (
     <>
       <TrackPage path={`/groups/${group.id}/expenses`} />
@@ -50,6 +54,13 @@ export default async function GroupExpensesPage({
                 <Download className="w-4 h-4" />
               </ExportLink>
             </Button>
+            {env.NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT && (
+              <CreateFromReceiptButton
+                groupId={groupId}
+                groupCurrency={group.currency}
+                categories={categories}
+              />
+            )}
             <Button asChild size="icon">
               <Link href={`/groups/${groupId}/expenses/create`}>
                 <Plus className="w-4 h-4" />
