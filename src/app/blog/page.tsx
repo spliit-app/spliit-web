@@ -43,7 +43,10 @@ export default async function BlogPage() {
       title: true,
       subtitle: { json: { content: true } },
       blogPosts: {
-        __args: { orderBy: enumBlogPostsItemOrderByEnum.date__DESC },
+        __args: {
+          orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
+          filter: { isPublished: true },
+        },
         items: {
           _id: true,
           _title: true,
@@ -57,8 +60,8 @@ export default async function BlogPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold mt-4 mb-4">{blogIndex.title}</h1>
-      <div className="mb-8">
+      <h1 className="text-4xl font-extrabold mt-4 mb-8">{blogIndex.title}</h1>
+      <div className="mb-12 prose dark:prose-invert">
         <RichText>{blogIndex.subtitle?.json.content}</RichText>
       </div>
       <ul className="grid gap-4">
@@ -70,9 +73,7 @@ export default async function BlogPage() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
               <Link href={`/blog/${post._slug}`}>{post._title}</Link>
             </h2>
-            <div className="prose dark:prose-invert sm:prose-lg">
-              {post.subtitle}
-            </div>
+            <div className="prose dark:prose-invert">{post.subtitle}</div>
             <div className="mt-1 sm:mt-2">
               <Button asChild variant="link" className="-ml-4">
                 <Link href={`/blog/${post._slug}`}>
