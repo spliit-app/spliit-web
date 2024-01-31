@@ -1,4 +1,5 @@
 import { formatDate, getPostBySlug } from '@/app/blog/[slug]/helpers'
+import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import { basehub } from 'basehub'
 import { RichText } from 'basehub/react'
@@ -54,6 +55,7 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
 
   return (
     <>
+      <TrackPage path={`/blog/${slug}`} />
       <div>
         <Button variant="link" asChild className="-ml-4">
           <Link href="/blog">
