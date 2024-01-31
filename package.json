@@ -9,7 +9,7 @@
     "lint": "next lint",
     "check-types": "tsc --noEmit",
     "check-formatting": "prettier -c src",
-    "postinstall": "prisma migrate deploy && prisma generate",
+    "postinstall": "prisma migrate deploy && prisma generate && basehub",
     "build-image": "./scripts/build-image.sh",
     "start-container": "docker compose --env-file container.env up"
   },
@@ -34,6 +34,7 @@
     "@react-email/preview": "^0.0.8",
     "@react-email/text": "^0.0.7",
     "@tailwindcss/typography": "^0.5.10",
+    "basehub": "^1.3.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
