@@ -35,7 +35,6 @@ export async function generateMetadata({
     openGraph: {
       title: post._title,
       description: post.subtitle ?? '',
-      // images: `/banner.png`,
       type: 'website',
       url: `/blog/${slug}`,
     },
@@ -43,7 +42,6 @@ export async function generateMetadata({
       card: 'summary_large_image',
       creator: '@scastiel',
       site: '@scastiel',
-      // images: `/banner.png`,
       title: post._title,
       description: post.subtitle ?? '',
     },
@@ -63,10 +61,13 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
           </Link>
         </Button>
       </div>
-      <h1 className="mt-4 mb-2 text-3xl font-bold">
+      <h1
+        className="mt-4 mb-2 text-3xl sm:text-6xl font-bold"
+        style={{ textWrap: 'balance' } as any}
+      >
         <Link href={`/blog/${slug}`}>{post._title}</Link>
       </h1>
-      <div className="text-muted-foreground flex gap-2 items-center mb-4 text-sm">
+      <div className="text-muted-foreground flex gap-2 items-center mb-4 text-sm sm:text-base">
         <span>{formatDate(post.date as any)}</span>
         <span>·</span>
         {post.author && (
