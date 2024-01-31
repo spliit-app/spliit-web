@@ -10,15 +10,14 @@ export const dynamic = 'force-static'
 
 export async function generateMetadata(): Promise<Metadata> {
   const { blogIndex } = await basehub().query({
-    // blog: { meta: { title: true, description: true, ogImage: { url: true } } },
     blogIndex: { title: true, subtitle: { plainText: true } },
-    // blogPosts: {items: {_title: true, subtitle: true, coverImage: {url: true}}}
   })
 
   return {
-    title: blogIndex.title,
+    title: {
+      absolute: `${blogIndex.title} · ${blogIndex.subtitle?.plainText}`,
+    },
     description: blogIndex.subtitle?.plainText,
-    // etc...
   }
 }
 
