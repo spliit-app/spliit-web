@@ -70,7 +70,7 @@ export default async function BlogPage() {
         {blogIndex.blogPosts.items.map((post) => (
           <li key={post._id} className="border-t py-6">
             <div className="text-muted-foreground text-sm mb-2">
-              {formatDate(post.date as any)}
+              {formatDate(post.date as string)}
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
               <Link href={`/blog/${post._slug}`}>{post._title}</Link>

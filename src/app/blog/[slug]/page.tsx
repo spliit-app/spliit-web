@@ -70,7 +70,7 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
         <Link href={`/blog/${slug}`}>{post._title}</Link>
       </h1>
       <div className="text-muted-foreground flex gap-2 items-center mb-4 text-sm sm:text-base">
-        <span>{formatDate(post.date as any)}</span>
+        <span>{formatDate(post.date as string)}</span>
         <span>·</span>
         {post.author && (
           <AuthorNameAvatar
