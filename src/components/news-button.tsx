@@ -23,6 +23,7 @@ import {
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { Linkedin, Sparkles, Twitter } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 type News = {
@@ -49,6 +50,17 @@ const news: News[] = [
             src={require('../../public/receipt-scanning-screenshot.png')}
             alt="Receipt scanning feature screenshot"
           />
+        </p>
+        <p>
+          <Button asChild>
+            <Link
+              href="/blog/announcing-receipt-scanning-using-ai"
+              target="_blank"
+              className="no-underline"
+            >
+              Read announcement
+            </Link>
+          </Button>
         </p>
       </>
     ),
