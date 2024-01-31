@@ -1,4 +1,7 @@
-const remotePatterns = [{ hostname: 'avatars.githubusercontent.com' }]
+const remotePatterns = [
+  { hostname: 'avatars.githubusercontent.com' },
+  { hostname: 'basehub.earth' },
+]
 if (process.env.S3_UPLOAD_BUCKET && process.env.S3_UPLOAD_REGION) {
   remotePatterns.push({
     hostname: `${process.env.S3_UPLOAD_BUCKET}.s3.${process.env.S3_UPLOAD_REGION}.amazonaws.com`,

@@ -26,6 +26,11 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
+      - name: Generate Basehub SDK
+        run: npx basehub
+        env:
+          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
+
       - name: Check TypeScript types
         run: npm run check-types
 

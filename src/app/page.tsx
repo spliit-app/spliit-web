@@ -38,12 +38,10 @@ export default function HomePage() {
           </p>
           <div className="flex gap-2">
             <Button asChild size="lg">
-              <Link
-                className="inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md"
-                href="/groups/create"
-              >
-                Create a group
-              </Link>
+              <Link href="/groups/create">Create a group</Link>
+            </Button>
+            <Button variant="secondary" asChild size="lg">
+              <Link href="/blog">Read our blog</Link>
             </Button>
           </div>
           <p className="mt-12 max-w-[42rem] leading-normal text-muted-foreground text-xl sm:text-2xl sm:leading-8">
