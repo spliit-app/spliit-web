@@ -88,8 +88,14 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
           className="w-full aspect-video rounded-lg object-cover shadow mb-8"
         />
       )}
-      <div className="prose dark:prose-invert sm:prose-lg">
-        <RichText>{(post.body as any).json.content}</RichText>
+      <div className="prose dark:prose-invert sm:prose-lg [&_a]:text-primary [&_a]:font-normal">
+        {post.body && (
+          <RichText
+            components={{ a: (props) => <a target="_blank" {...props} /> }}
+          >
+            {post.body.json.content}
+          </RichText>
+        )}
       </div>
     </>
   )
