@@ -1,3 +1,4 @@
+import { formatDate, getPostBySlug } from '@/app/blog/[slug]/helpers'
 import { Button } from '@/components/ui/button'
 import { basehub } from 'basehub'
 import { RichText } from 'basehub/react'
@@ -21,21 +22,37 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params,
+  params: { slug },
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug)
+  const post = await getPostBySlug(slug)
+  if (!post) notFound()
 
   return {
     title: post._title,
     description: post.subtitle,
-    // etc...
+    openGraph: {
+      title: post._title,
+      description: post.subtitle ?? '',
+      // images: `/banner.png`,
+      type: 'website',
+      url: `/blog/${slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      creator: '@scastiel',
+      site: '@scastiel',
+      // images: `/banner.png`,
+      title: post._title,
+      description: post.subtitle ?? '',
+    },
   }
 }
 
 const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
   const post = await getPostBySlug(slug)
+  if (!post) notFound()
 
   return (
     <>
@@ -50,11 +67,7 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
         <Link href={`/blog/${slug}`}>{post._title}</Link>
       </h1>
       <div className="text-muted-foreground flex gap-2 items-center mb-4 text-sm">
-        <span>
-          {new Date(post.date as any).toLocaleString('en-US', {
-            dateStyle: 'long',
-          })}
-        </span>
+        <span>{formatDate(post.date as any)}</span>
         <span>·</span>
         {post.author && (
           <AuthorNameAvatar
@@ -108,33 +121,6 @@ function AuthorAvatar({
       height={avatar.height}
     />
   )
-}
-
-async function getPostBySlug(slug: string) {
-  const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
-    blogIndex: {
-      blogPosts: {
-        __args: { first: 1, filter: { _sys_slug: { eq: slug } } },
-        items: {
-          _id: true,
-          _title: true,
-          subtitle: true,
-          date: true,
-          body: { json: { content: true } },
-          coverImage: { url: true, width: true, height: true },
-          author: {
-            name: true,
-            avatar: { url: true, width: true, height: true },
-          },
-        },
-      },
-    },
-  })
-
-  const post = blogIndex.blogPosts.items.at(0)
-  if (!post) notFound()
-
-  return post
 }
 
 export default BlogPage

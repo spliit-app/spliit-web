@@ -1,3 +1,4 @@
+import { formatDate } from '@/app/blog/[slug]/helpers'
 import { Button } from '@/components/ui/button'
 import { basehub, enumBlogPostsItemOrderByEnum } from 'basehub'
 import { RichText } from 'basehub/react'
@@ -18,6 +19,21 @@ export async function generateMetadata(): Promise<Metadata> {
       absolute: `${blogIndex.title} · ${blogIndex.subtitle?.plainText}`,
     },
     description: blogIndex.subtitle?.plainText,
+    openGraph: {
+      title: blogIndex.title ?? '',
+      description: blogIndex.subtitle?.plainText,
+      images: `/banner.png`,
+      type: 'website',
+      url: `/blog`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      creator: '@scastiel',
+      site: '@scastiel',
+      images: `/banner.png`,
+      title: blogIndex.title ?? '',
+      description: blogIndex.subtitle?.plainText,
+    },
   }
 }
 
@@ -49,9 +65,7 @@ export default async function BlogPage() {
         {blogIndex.blogPosts.items.map((post) => (
           <li key={post._id} className="border-t py-6">
             <div className="text-muted-foreground text-sm mb-2">
-              {new Date(post.date as any).toLocaleDateString('en-US', {
-                dateStyle: 'long',
-              })}
+              {formatDate(post.date as any)}
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
               <Link href={`/blog/${post._slug}`}>{post._title}</Link>
