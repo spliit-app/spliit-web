@@ -30,3 +30,17 @@ export function formatDate(date: string) {
     timeZone: 'UTC',
   })
 }
+
+export async function getPosts() {
+  const {
+    blogIndex: { blogPosts },
+  } = await basehub({ cache: 'no-store' }).query({
+    blogIndex: {
+      blogPosts: {
+        __args: { filter: { isPublished: true } },
+        items: { _slug: true, _sys: { lastModifiedAt: true } },
+      },
+    },
+  })
+  return blogPosts.items
+}

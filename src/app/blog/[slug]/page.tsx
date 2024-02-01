@@ -1,7 +1,6 @@
-import { formatDate, getPostBySlug } from '@/app/blog/[slug]/helpers'
+import { formatDate, getPostBySlug, getPosts } from '@/app/blog/[slug]/helpers'
 import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
-import { basehub } from 'basehub'
 import { RichText } from 'basehub/react'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -13,13 +12,8 @@ export const revalidate = 60
 export const dynamic = 'force-static'
 
 export async function generateStaticParams() {
-  const {
-    blogIndex: { blogPosts },
-  } = await basehub({ cache: 'no-store' }).query({
-    blogIndex: { blogPosts: { items: { _slug: true } } },
-  })
-
-  return blogPosts.items.map((blogPost) => ({ slug: blogPost._slug }))
+  const posts = await getPosts()
+  return posts.map(({ _slug }) => ({ slug: _slug }))
 }
 
 export async function generateMetadata({
