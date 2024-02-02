@@ -21,7 +21,15 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
-import { Linkedin, Sparkles, Twitter } from 'lucide-react'
+import {
+  Linkedin,
+  LucideIcon,
+  Receipt,
+  Sparkles,
+  Speaker,
+  Twitter,
+  Wand,
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -31,6 +39,7 @@ type News = {
   title: JSX.Element
   summary: JSX.Element
   content: JSX.Element
+  icon: LucideIcon
 }
 
 const news: News[] = [
@@ -38,6 +47,7 @@ const news: News[] = [
     id: 'scan-receipts',
     title: <>Scan receipts to create expenses</>,
     summary: <>Create expenses faster by taking a photo of a receipt!</>,
+    icon: Wand,
     content: (
       <>
         <p>
@@ -69,6 +79,7 @@ const news: News[] = [
     id: 'receipts',
     title: <>Attach receipts to expenses</>,
     summary: <>You can now upload images to each of your expenses!</>,
+    icon: Receipt,
     content: (
       <>
         <p>
@@ -94,6 +105,7 @@ const news: News[] = [
         you told your friends about it!
       </>
     ),
+    icon: Speaker,
     content: (
       <>
         <p>
@@ -171,7 +183,7 @@ export function NewsButton() {
               <Sparkles className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="mx-2 w-[22rem]">
+          <PopoverContent className="mx-2 w-[22rem] sm:w-[30rem]">
             <h2 className="mb-3 border-b px-3 pb-2 font-bold">
               Latest updates
             </h2>
@@ -263,17 +275,23 @@ function NewsDrawer({
 }
 
 function NewsListItem({ news, onClick }: { news: News; onClick?: () => void }) {
+  const Icon = news.icon
   return (
     <button
-      className="flex flex-col rounded-md p-3 text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+      className="flex rounded-md text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 p-3 gap-3 w-full"
       onClick={(event) => {
         event.preventDefault()
         onClick?.()
       }}
     >
-      <h3 className="mb-1 font-bold">{news.title}</h3>
-      <div className="prose-sm dark:prose-invert">
-        <p className="line-clamp-2">{news.summary}</p>
+      <div className="flex-shrink-0 p-1">
+        <Icon className="w-5 h-5" />
+      </div>
+      <div className="flex-1 flex-col">
+        <h3 className="mb-1 font-bold">{news.title}</h3>
+        <div className="prose-sm dark:prose-invert">
+          <p className="line-clamp-2">{news.summary}</p>
+        </div>
       </div>
     </button>
   )
