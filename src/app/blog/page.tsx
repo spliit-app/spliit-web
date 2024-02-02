@@ -1,4 +1,4 @@
-import { formatDate } from '@/app/blog/[slug]/helpers'
+import { formatDate, getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
 import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import { basehub, enumBlogPostsItemOrderByEnum } from 'basehub'
@@ -39,25 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-  const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
-    blogIndex: {
-      title: true,
-      subtitle: { json: { content: true } },
-      blogPosts: {
-        __args: {
-          orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
-          filter: { isPublished: true },
-        },
-        items: {
-          _id: true,
-          _title: true,
-          _slug: true,
-          subtitle: true,
-          date: true,
-        },
-      },
-    },
-  })
+  const blogIndex = await getBlogIndexWithPosts()
 
   return (
     <div>

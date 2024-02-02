@@ -1,4 +1,5 @@
-import { basehub } from 'basehub'
+import { delay } from '@/lib/utils'
+import { basehub, enumBlogPostsItemOrderByEnum } from 'basehub'
 
 export async function getPostBySlug(slug: string) {
   const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
@@ -43,4 +44,27 @@ export async function getPosts() {
     },
   })
   return blogPosts.items
+}
+
+export async function getBlogIndexWithPosts() {
+  const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
+    blogIndex: {
+      title: true,
+      subtitle: { json: { content: true } },
+      blogPosts: {
+        __args: {
+          orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
+          filter: { isPublished: true },
+        },
+        items: {
+          _id: true,
+          _title: true,
+          _slug: true,
+          subtitle: true,
+          date: true,
+        },
+      },
+    },
+  })
+  return blogIndex
 }

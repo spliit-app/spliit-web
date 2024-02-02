@@ -1,3 +1,4 @@
+import { getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
 import { NewsButton } from '@/components/news-button'
 import { ProgressBar } from '@/components/progress-bar'
@@ -126,7 +127,7 @@ export default function RootLayout({
 
           {children}
 
-          <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 flex flex-col sm:flex-row sm:justify-between gap-4 text-xs [&_a]:underline">
+          <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 grid sm:grid-cols-2 gap-4 text-xs [&_a]:underline">
             <div className="flex flex-col space-y-2">
               <div className="sm:text-lg font-semibold text-base flex space-x-2 items-center">
                 <Link className="flex items-center gap-2" href="/">
@@ -168,10 +169,34 @@ export default function RootLayout({
                 </span>
               </div>
             </div>
+            <div>
+              <h3 className="text-[small] font-semibold">On our blog</h3>
+              <Suspense fallback={<div>Loading…</div>}>
+                <BlogPostsList />
+              </Suspense>
+            </div>
           </footer>
           <Toaster />
         </ThemeProvider>
       </body>
     </html>
+  )
+}
+
+async function BlogPostsList() {
+  const blogIndex = await getBlogIndexWithPosts()
+  return (
+    <ul>
+      {blogIndex.blogPosts.items.map((post) => (
+        <li key={post._id}>
+          <Link href={`/blog/${post._slug}`}>{post._title}</Link>
+        </li>
+      ))}
+      <li>
+        <Link href={`/blog`} className="italic">
+          See more…
+        </Link>
+      </li>
+    </ul>
   )
 }
