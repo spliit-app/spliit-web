@@ -49,7 +49,7 @@ export async function getBlogIndexWithPosts() {
   const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
     blogIndex: {
       title: true,
-      subtitle: { json: { content: true } },
+      subtitle: { json: { content: true }, plainText: true },
       blogPosts: {
         __args: {
           orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
@@ -62,6 +62,7 @@ export async function getBlogIndexWithPosts() {
           _slug: true,
           subtitle: true,
           date: true,
+          coverImage: { url: true, width: true, height: true },
         },
       },
     },

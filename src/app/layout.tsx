@@ -172,10 +172,21 @@ export default function RootLayout({
               </div>
             </div>
             <div>
-              <h3 className="text-[small] font-semibold">On our blog</h3>
+              <h3 className="text-[small] font-semibold mb-1">On our blog</h3>
               <Suspense fallback={<div>Loading…</div>}>
                 <BlogPostsList />
               </Suspense>
+              <ul className="flex space-x-2 [&_a]:no-underline mt-2">
+                <Button size="sm" variant="secondary" asChild>
+                  <a href="/blog/feed/rss.xml">RSS</a>
+                </Button>
+                <Button size="sm" variant="secondary" asChild>
+                  <a href="/blog/feed/feed.xml">Atom</a>
+                </Button>
+                <Button size="sm" variant="secondary" asChild>
+                  <a href="/blog/feed/feed.json">JSON</a>
+                </Button>
+              </ul>
             </div>
           </footer>
           <Toaster />
@@ -191,13 +202,22 @@ async function BlogPostsList() {
     <ul>
       {blogIndex.blogPosts.items.map((post) => (
         <li key={post._id}>
-          <Link href={`/blog/${post._slug}`}>{post._title}</Link>
+          <Button variant="link" asChild size="sm" className="-ml-3 h-7">
+            <Link
+              href={`/blog/${post._slug}`}
+              className="!text-foreground font-normal"
+            >
+              {post._title}
+            </Link>
+          </Button>
         </li>
       ))}
       <li>
-        <Link href={`/blog`} className="italic">
-          See more…
-        </Link>
+        <Button variant="link" asChild size="sm" className="-ml-3 h-7">
+          <Link href={`/blog`} className="!text-foreground font-normal italic">
+            See more…
+          </Link>
+        </Button>
       </li>
     </ul>
   )
