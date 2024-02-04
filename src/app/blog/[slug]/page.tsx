@@ -93,6 +93,19 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
           </RichText>
         )}
       </div>
+      <div className="border-t mt-10 pt-4 flex gap-1.5 text-muted-foreground">
+        Written{' '}
+        {post.author && (
+          <>
+            by{' '}
+            <AuthorNameAvatar
+              name={post.author.name}
+              avatar={post.author.avatar}
+            />
+          </>
+        )}{' '}
+        on <span>{formatDate(post.date as string)}.</span>
+      </div>
     </>
   )
 }
