@@ -41,8 +41,10 @@ import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Save, Trash2 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
+import { extractCategoryFromTitle } from './expense-form-actions'
 
 export type Props = {
   group: NonNullable<Awaited<ReturnType<typeof getGroup>>>
@@ -135,6 +137,7 @@ export function ExpenseForm({
         },
   })
   const sendEvent = useAnalytics()
+  const [isCategoryLoading, setCategoryLoading] = useState(false)
 
   return (
     <Form {...form}>
@@ -175,6 +178,17 @@ export function ExpenseForm({
                       placeholder="Monday evening restaurant"
                       className="text-base"
                       {...field}
+                      onBlur={async () => {
+                        field.onBlur() // avoid skipping other blur event listeners since we overwrite `field`
+                        if (process.env.NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT) {
+                          setCategoryLoading(true)
+                          const { categoryId } = await extractCategoryFromTitle(
+                            field.value,
+                          )
+                          form.setValue('category', categoryId)
+                          setCategoryLoading(false)
+                        }
+                      }}
                     />
                   </FormControl>
                   <FormDescription>
@@ -259,8 +273,11 @@ export function ExpenseForm({
                   <FormLabel>Category</FormLabel>
                   <CategorySelector
                     categories={categories}
-                    defaultValue={field.value}
+                    defaultValue={
+                      form.watch(field.name) // may be overwritten externally
+                    }
                     onValueChange={field.onChange}
+                    isLoading={isCategoryLoading}
                   />
                   <FormDescription>
                     Select the expense category.
