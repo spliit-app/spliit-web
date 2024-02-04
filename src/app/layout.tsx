@@ -1,3 +1,4 @@
+import { ApplePwaSplash } from '@/app/apple-pwa-splash'
 import { getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
 import { NewsButton } from '@/components/news-button'
@@ -79,6 +80,7 @@ export default function RootLayout({
         />
       )}
       <AxiomWebVitals />
+      <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
       <body className="pt-16 min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
         <ThemeProvider
           attribute="class"
