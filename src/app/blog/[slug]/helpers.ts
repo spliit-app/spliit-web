@@ -1,4 +1,3 @@
-import { delay } from '@/lib/utils'
 import { basehub, enumBlogPostsItemOrderByEnum } from 'basehub'
 
 export async function getPostBySlug(slug: string) {
@@ -54,7 +53,8 @@ export async function getBlogIndexWithPosts() {
       blogPosts: {
         __args: {
           orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
-          filter: { isPublished: true },
+          filter:
+            process.env.NODE_ENV === 'production' ? { isPublished: true } : {},
         },
         items: {
           _id: true,

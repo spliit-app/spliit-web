@@ -85,7 +85,17 @@ const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
       <div className="prose dark:prose-invert sm:prose-lg [&_a]:text-primary [&_a]:font-normal">
         {post.body && (
           <RichText
-            components={{ a: (props) => <a target="_blank" {...props} /> }}
+            components={{
+              a: (props) => <a target="_blank" {...props} />,
+              img: (props) => {
+                const caption = post.body?.json.content.find(
+                  (block: any) =>
+                    block.type === 'image' && block.attrs?.src === props.src,
+                )?.attrs?.caption
+                // eslint-disable-next-line @next/next/no-img-element
+                return <img {...props} alt={caption} />
+              },
+            }}
           >
             {post.body.json.content}
           </RichText>
