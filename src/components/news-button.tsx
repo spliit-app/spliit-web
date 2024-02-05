@@ -22,8 +22,10 @@ import {
 } from '@/components/ui/popover'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import {
+  ExternalLink,
   Linkedin,
   LucideIcon,
+  Newspaper,
   Receipt,
   Sparkles,
   Speaker,
@@ -43,6 +45,37 @@ type News = {
 }
 
 const news: News[] = [
+  {
+    id: 'blog-post-splitwise',
+    title: <>We need an open source alternative to Splitwise</>,
+    summary: <>Read our new blog post!</>,
+    icon: Newspaper,
+    content: (
+      <>
+        <p>
+          Since last fall, a free account on Splitwise lets you enter only three
+          transactions each day. 😲
+        </p>
+        <p>Could this happen with Spliit? 🤔</p>
+        <p>
+          Read our new blog post showing why, for some applications, free is
+          just not enough. We need open source alternatives.
+        </p>
+        <p>
+          <Button asChild>
+            <a
+              target="_blank"
+              href="/blog/we-need-an-open-source-alternative-to-splitwise"
+              className="no-underline"
+            >
+              <ExternalLink className="mr-2 w-4" />
+              Read the blog post
+            </a>
+          </Button>
+        </p>
+      </>
+    ),
+  },
   {
     id: 'scan-receipts',
     title: <>Scan receipts to create expenses</>,
