@@ -159,6 +159,50 @@ export default function RootLayout({
                   </a>
                 </span>
                 <span>
+                  <ul className="[&_a]:no-underline [&_a]:px-1 flex -ml-1">
+                    <li>
+                      <Button variant="link" size="sm" asChild>
+                        <Link
+                          target="_blank"
+                          href="https://linkedin.com/company/101119877"
+                        >
+                          LinkedIn
+                        </Link>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button variant="link" size="sm" asChild>
+                        <Link
+                          target="_blank"
+                          href="https://github.com/spliit-app"
+                        >
+                          GitHub
+                        </Link>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button variant="link" size="sm" asChild>
+                        <Link
+                          target="_blank"
+                          href="https://www.reddit.com/r/spliit/"
+                        >
+                          Reddit
+                        </Link>
+                      </Button>
+                    </li>
+                    <li>
+                      <Button variant="link" size="sm" asChild>
+                        <Link
+                          target="_blank"
+                          href="https://www.indiehackers.com/product/spliit"
+                        >
+                          IndieHackers
+                        </Link>
+                      </Button>
+                    </li>
+                  </ul>
+                </span>
+                <span>
                   <FeedbackModal
                     donationUrl={env.STRIPE_DONATION_LINK}
                     defaultTab="support"
