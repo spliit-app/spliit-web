@@ -76,3 +76,17 @@ export function useLocalStorageState<T>(
 
   return [value, setValue, loaded]
 }
+
+/**
+ * @returns The active user, or `null` until it is fetched from local storage
+ */
+export function useActiveUser(groupId: string) {
+  const [activeUser, setActiveUser] = useState<string | null>(null)
+
+  useEffect(() => {
+    const activeUser = localStorage.getItem(`${groupId}-activeUser`)
+    if (activeUser) setActiveUser(activeUser)
+  }, [groupId])
+
+  return activeUser
+}
