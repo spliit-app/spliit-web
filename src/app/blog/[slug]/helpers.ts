@@ -34,7 +34,7 @@ export function formatDate(date: string) {
 export async function getPosts() {
   const {
     blogIndex: { blogPosts },
-  } = await basehub({ cache: 'no-store' }).query({
+  } = await basehub({ next: { revalidate: 60 } }).query({
     blogIndex: {
       blogPosts: {
         __args: { filter: { isPublished: true } },
