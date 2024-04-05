@@ -51,6 +51,7 @@ import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { DeletePopup } from './delete-popup'
 import { extractCategoryFromTitle } from './expense-form-actions'
+import { Textarea } from './ui/textarea'
 
 export type Props = {
   group: NonNullable<Awaited<ReturnType<typeof getGroup>>>
@@ -157,7 +158,7 @@ export function ExpenseForm({
   const getSelectedPayer = (field?: { value: string }) => {
     if (isCreate && typeof window !== 'undefined') {
       const activeUser = localStorage.getItem(`${group.id}-activeUser`)
-      if (activeUser && activeUser !== 'None') {
+      if (activeUser && activeUser !== 'None' && field?.value === undefined) {
         return activeUser
       }
     }
@@ -181,6 +182,7 @@ export function ExpenseForm({
           saveDefaultSplittingOptions: false,
           isReimbursement: expense.isReimbursement,
           documents: expense.documents,
+          notes: expense.notes ?? '',
         }
       : searchParams.get('reimbursement')
       ? {
@@ -203,6 +205,7 @@ export function ExpenseForm({
           splitMode: defaultSplittingOptions.splitMode,
           saveDefaultSplittingOptions: false,
           documents: [],
+          notes: '',
         }
       : {
           title: searchParams.get('title') ?? '',
@@ -229,6 +232,7 @@ export function ExpenseForm({
                 },
               ]
             : [],
+          notes: '',
         },
   })
   const sendEvent = useAnalytics()
@@ -414,6 +418,18 @@ export function ExpenseForm({
                     Select the participant who paid the expense.
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem className="sm:order-6">
+                  <FormLabel>Notes</FormLabel>
+                  <FormControl>
+                    <Textarea className="text-base" {...field} />
+                  </FormControl>
                 </FormItem>
               )}
             />

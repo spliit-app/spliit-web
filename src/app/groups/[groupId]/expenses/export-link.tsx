@@ -23,6 +23,7 @@ export const ExportLink = function ExportLink({
           `/groups/${groupId}/expenses`,
         )
       }}
+      title="Export to JSON"
     >
       {children}
     </Link>
