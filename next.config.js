@@ -26,6 +26,12 @@ const nextConfig = {
   images: {
     remotePatterns,
   },
+  // Required to run in a codespace (see https://github.com/vercel/next.js/issues/58019)
+  experimental: {
+    serverActions: {
+        allowedOrigins: ['localhost:3000'],
+    },
+},
 }
 
 const { withPlausibleProxy } = require('next-plausible')
