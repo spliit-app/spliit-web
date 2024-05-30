@@ -42,7 +42,10 @@ import { useFieldArray, useForm } from 'react-hook-form'
 
 export type Props = {
   group?: NonNullable<Awaited<ReturnType<typeof getGroup>>>
-  onSubmit: (groupFormValues: GroupFormValues) => Promise<void>
+  onSubmit: (
+    groupFormValues: GroupFormValues,
+    participantId?: string,
+  ) => Promise<void>
   protectedParticipantIds?: string[]
 }
 
@@ -109,7 +112,11 @@ export function GroupForm({
           } else {
             sendEvent({ event: 'group: create', props: {} }, `/groups`)
           }
-          await onSubmit(values)
+          await onSubmit(
+            values,
+            group?.participants.find((p) => p.name === activeUser)?.id ??
+              undefined,
+          )
         })}
       >
         <Card className="mb-4">
@@ -183,7 +190,11 @@ export function GroupForm({
                         </FormLabel>
                         <FormControl>
                           <div className="flex gap-2">
-                            <Input className="text-base" {...field} />
+                            <Input
+                              className="text-base"
+                              {...field}
+                              placeholder="New"
+                            />
                             {item.id &&
                             protectedParticipantIds.includes(item.id) ? (
                               <HoverCard>
@@ -231,7 +242,7 @@ export function GroupForm({
             <Button
               variant="secondary"
               onClick={() => {
-                append({ name: 'New' })
+                append({ name: '' })
               }}
               type="button"
             >
