@@ -12,7 +12,7 @@ export const revalidate = 60
 export const dynamic = 'force-static'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { blogIndex } = await basehub().query({
+  const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
     blogIndex: { title: true, subtitle: { plainText: true } },
   })
 

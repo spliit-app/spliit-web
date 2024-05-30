@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { blogIndex } = await basehub().query({
+  const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
     blogIndex: { title: true, subtitle: { plainText: true } },
   })
 
