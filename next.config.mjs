@@ -1,3 +1,9 @@
+import { withAxiom } from 'next-axiom'
+import createNextIntlPlugin from 'next-intl/plugin'
+import { withPlausibleProxy } from 'next-plausible'
+
+const withNextIntl = createNextIntlPlugin()
+
 /**
  * Undefined entries are not supported. Push optional patterns to this array only if defined.
  * @type {import('next/dist/shared/lib/image-config').RemotePattern}
@@ -29,11 +35,9 @@ const nextConfig = {
   // Required to run in a codespace (see https://github.com/vercel/next.js/issues/58019)
   experimental: {
     serverActions: {
-        allowedOrigins: ['localhost:3000'],
+      allowedOrigins: ['localhost:3000'],
     },
-},
+  },
 }
 
-const { withPlausibleProxy } = require('next-plausible')
-const { withAxiom } = require('next-axiom')
-module.exports = withAxiom(withPlausibleProxy()(nextConfig))
+export default withAxiom(withPlausibleProxy()(withNextIntl(nextConfig)))

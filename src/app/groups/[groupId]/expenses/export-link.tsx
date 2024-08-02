@@ -1,6 +1,7 @@
 'use client'
 
 import { useAnalytics } from '@/components/track-page'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 
@@ -10,6 +11,7 @@ export const ExportLink = function ExportLink({
   className,
 }: PropsWithChildren<{ groupId: string; className?: string }>) {
   const sendEvent = useAnalytics()
+  const t = useTranslations('Expenses')
 
   return (
     <Link
@@ -23,7 +25,7 @@ export const ExportLink = function ExportLink({
           `/groups/${groupId}/expenses`,
         )
       }}
-      title="Export to JSON"
+      title={t('exportJson')}
     >
       {children}
     </Link>
