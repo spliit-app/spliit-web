@@ -193,14 +193,16 @@ function Content({ children }: { children: React.ReactNode }) {
               >
                 <Button variant="link" className="text-pink-600 -mx-4">
                   <HeartFilledIcon className="w-4 h-4 mr-2" />
-                  Support us
+                  {t('Support.buttonLabel')}
                 </Button>
               </FeedbackModal>
             </span>
           </div>
         </div>
         <div>
-          <h3 className="text-[small] font-semibold mb-1">On our blog</h3>
+          <h3 className="text-[small] font-semibold mb-1">
+            {t('Footer.onOurBlog')}
+          </h3>
           <Suspense fallback={<div>Loading…</div>}>
             <BlogPostsList />
           </Suspense>

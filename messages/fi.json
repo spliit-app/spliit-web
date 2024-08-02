@@ -4,7 +4,11 @@
   },
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
-    "builtBy": "Tekijät: <author>Sebastien Castiel</author> ja <source>muut osallistujat</source>"
+    "builtBy": "Tekijät: <author>Sebastien Castiel</author> ja <source>muut osallistujat</source>",
+    "onOurBlog": "Blogissamme (englanti)"
+  },
+  "Support": {
+    "buttonLabel": "Tue meitä"
   },
   "Expenses": {
     "title": "Kulut",

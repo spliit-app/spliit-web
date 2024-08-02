@@ -4,7 +4,11 @@
   },
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
-    "builtBy": "Built by <author>Sebastien Castiel</author> and <source>contributors</source>"
+    "builtBy": "Built by <author>Sebastien Castiel</author> and <source>contributors</source>",
+    "onOurBlog": "On our blog"
+  },
+  "Support": {
+    "buttonLabel": "Support us"
   },
   "Expenses": {
     "title": "Expenses",
