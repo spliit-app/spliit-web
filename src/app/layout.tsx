@@ -11,8 +11,10 @@ import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
 import type { Metadata, Viewport } from 'next'
+import { AxiomWebVitals } from 'next-axiom'
 import { NextIntlClientProvider, useTranslations } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
+import PlausibleProvider from 'next-plausible'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -233,6 +235,14 @@ export default async function RootLayout({
   const messages = await getMessages()
   return (
     <html lang={locale} suppressHydrationWarning>
+      {env.PLAUSIBLE_DOMAIN && (
+        <PlausibleProvider
+          domain={env.PLAUSIBLE_DOMAIN}
+          trackOutboundLinks
+          manualPageviews
+        />
+      )}
+      <AxiomWebVitals />
       <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
       <body className="pt-16 min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
         <NextIntlClientProvider messages={messages}>
