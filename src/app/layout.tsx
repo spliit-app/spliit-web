@@ -202,9 +202,7 @@ function Content({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div>
-          <h3 className="text-[small] font-semibold mb-1">
-            {t('Footer.onOurBlog')}
-          </h3>
+          <h3 className="text-[small] font-semibold mb-1">On our blog</h3>
           <Suspense fallback={<div>Loading…</div>}>
             <BlogPostsList />
           </Suspense>
