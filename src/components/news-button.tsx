@@ -23,6 +23,7 @@ import {
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import {
   ExternalLink,
+  Globe,
   Linkedin,
   LucideIcon,
   Newspaper,
@@ -45,6 +46,37 @@ type News = {
 }
 
 const news: News[] = [
+  {
+    id: 'languages',
+    title: <>Spliit is now available in eight languages!</>,
+    summary: (
+      <>
+        French, German, Spanish, and more! Read about it in our new blog post.
+      </>
+    ),
+    icon: Globe,
+    content: (
+      <>
+        <p>
+          Spliit began as an English-only app but now supports multiple
+          languages, thanks to the open-source community. Learn about the
+          contributors and how to help expand language support.
+        </p>
+        <p>
+          <Button asChild>
+            <a
+              target="_blank"
+              href="/blog/spliit-is-now-available-in-eight-languages"
+              className="no-underline"
+            >
+              <ExternalLink className="mr-2 w-4" />
+              Read the blog post
+            </a>
+          </Button>
+        </p>
+      </>
+    ),
+  },
   {
     id: 'blog-post-splitwise',
     title: <>We need an open source alternative to Splitwise</>,

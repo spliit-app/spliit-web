@@ -65,3 +65,7 @@
 .landing-header strong {
   @apply font-bold text-transparent;
 }
+
+.text-balance {
+  text-wrap: balance;
+}
