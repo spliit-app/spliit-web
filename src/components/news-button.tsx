@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/popover'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import {
+  BarChart,
   ExternalLink,
   Globe,
   Linkedin,
@@ -46,6 +47,38 @@ type News = {
 }
 
 const news: News[] = [
+  {
+    id: 'transparency-post',
+    title: <>How much does Spliit cost?</>,
+    summary: (
+      <>
+        A new blog post to cover how much Spliit’s hosting costs and how much
+        people donate.
+      </>
+    ),
+    icon: BarChart,
+    content: (
+      <>
+        <p>
+          Spliit has grown to 152k visitors, with community donations helping
+          cover its hosting costs. Explore its usage trends, funding, and the
+          contributors driving its development.
+        </p>
+        <p>
+          <Button asChild>
+            <a
+              target="_blank"
+              href="/blog/spliit-by-the-stats-usage-costs-donations"
+              className="no-underline"
+            >
+              <ExternalLink className="mr-2 w-4" />
+              Read the blog post
+            </a>
+          </Button>
+        </p>
+      </>
+    ),
+  },
   {
     id: 'languages',
     title: <>Spliit is now available in eight languages!</>,
