@@ -203,7 +203,8 @@
     "creating": "Создание…",
     "save": "Сохранить",
     "saving": "Сохранение…",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "reimbursement": "Возмещение"
   },
   "ExpenseDocumentsInput": {
     "TooBigToast": {
@@ -300,6 +301,7 @@
     "es": "Español",
     "de-DE": "Deutsch",
     "zh-CN": "Chinese (Simplified)",
+    "pl-PL": "Polski",
     "ru-RU": "Русский",
     "it-IT": "Italiano",
     "ua-UA": "Українська"
