@@ -74,7 +74,7 @@ export function CreateFromReceiptButton() {
 }
 
 function ReceiptDialogContent() {
-  const { group } = useCurrentGroup()
+  const { group, groupId } = useCurrentGroup()
   const { data: categoriesData } = trpc.categories.list.useQuery()
   const categories = categoriesData?.categories
 
