@@ -16,6 +16,7 @@ import { Download, Plus } from 'lucide-react'
 import { Metadata } from 'next'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { useCurrentGroup } from '../current-group-context'
 
 export const revalidate = 3600
 
@@ -24,13 +25,12 @@ export const metadata: Metadata = {
 }
 
 export default function GroupExpensesPageClient({
-  groupId,
   enableReceiptExtract,
 }: {
-  groupId: string
   enableReceiptExtract: boolean
 }) {
   const t = useTranslations('Expenses')
+  const { groupId } = useCurrentGroup()
 
   return (
     <>
@@ -53,9 +53,7 @@ export default function GroupExpensesPageClient({
                 <Download className="w-4 h-4" />
               </Link>
             </Button>
-            {enableReceiptExtract && (
-              <CreateFromReceiptButton groupId={groupId} />
-            )}
+            {enableReceiptExtract && <CreateFromReceiptButton />}
             <Button asChild size="icon">
               <Link
                 href={`/groups/${groupId}/expenses/create`}
@@ -68,7 +66,7 @@ export default function GroupExpensesPageClient({
         </div>
 
         <CardContent className="p-0 pt-2 pb-4 sm:pb-6 flex flex-col gap-4 relative">
-          <ExpenseList groupId={groupId} />
+          <ExpenseList />
         </CardContent>
       </Card>
 
