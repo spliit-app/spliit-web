@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
+import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
   BarChart,
   ExternalLink,
@@ -29,6 +30,7 @@ import {
   LucideIcon,
   Newspaper,
   Receipt,
+  Smartphone,
   Sparkles,
   Speaker,
   Twitter,
@@ -47,6 +49,54 @@ type News = {
 }
 
 const news: News[] = [
+  {
+    id: 'mobile-app',
+    title: <>The iOS app is here!</>,
+    summary: (
+      <>
+        You can now download the beta version of Spliit Mobile on your iPhone!
+      </>
+    ),
+    icon: Smartphone,
+    content: (
+      <>
+        <p>
+          Spliit started as a web-only app, but a mobile app always has been the
+          #1 feature asked by users!
+        </p>
+        <p>
+          It’s a very early version, and only the most basic features are here,
+          but it should be enough for what you need everyday.
+        </p>
+        <p>
+          Download the app from the App Store, test it and let us know what you
+          think of it 😊
+        </p>
+        <p className="flex items-center gap-2">
+          <Button asChild>
+            <a
+              target="_blank"
+              href="https://apps.apple.com/us/app/spliit-shares-expenses/id6737742507"
+              className="no-underline"
+            >
+              <ExternalLink className="mr-2 w-4" />
+              Download on App Store
+            </a>
+          </Button>
+          <Button variant="secondary" asChild>
+            <a
+              target="_blank"
+              href="https://github.com/spliit-app/spliit-mobile"
+              className="no-underline"
+            >
+              <GitHubLogoIcon className="mr-2 w-4" />
+              More on GitHub
+            </a>
+          </Button>
+        </p>
+      </>
+    ),
+  },
   {
     id: 'transparency-post',
     title: <>How much does Spliit cost?</>,
