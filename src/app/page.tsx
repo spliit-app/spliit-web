@@ -13,12 +13,12 @@ import { Button } from '@/components/ui/button'
 import { env } from '@/lib/env'
 import {
   BarChartHorizontalBig,
+  Calendar,
   CircleDollarSign,
   Divide,
   FileImage,
   FolderTree,
   Github,
-  List,
   LucideIcon,
   ShieldX,
   Users,
@@ -75,15 +75,21 @@ export default function HomePage() {
           </p>
           <div className="mt-8 md:mt-6 w-full grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 text-left">
             <Feature
-              Icon={Users}
-              name="Groups"
-              description="Create a group for a travel, an event, a gift…"
+              Icon={Calendar}
+              name="Recurring Expenses"
+              description="Create daily, weekly, and monthly recurring expenses."
+              beta
             />
             <Feature
+              Icon={Users}
+              name="Groups"
+              description="Create a group for a travel, an event, a gift… and add expenses to it."
+            />
+            {/* <Feature
               Icon={List}
               name="Expenses"
               description="Create and list expenses in your group."
-            />
+            /> */}
             <Feature
               Icon={FolderTree}
               name="Categories"

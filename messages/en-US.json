@@ -24,7 +24,9 @@
     "create": "Create expense",
     "createFirst": "Create the first one",
     "noExpenses": "Your group doesn’t contain any expense yet.",
+    "export": "Export",
     "exportJson": "Export to JSON",
+    "exportCsv": "Export to CSV",
     "searchPlaceholder": "Search for an expense…",
     "ActiveUserModal": {
       "title": "Who are you?",
@@ -39,7 +41,7 @@
       "earlierThisMonth": "Earlier this month",
       "lastMonth": "Last month",
       "earlierThisYear": "Earlier this year",
-      "lastYera": "Last year",
+      "lastYear": "Last year",
       "older": "Older"
     }
   },
@@ -164,6 +166,15 @@
         "label": "Paid by",
         "description": "Select the participant who paid the expense."
       },
+      "recurrenceRule": {
+        "label": "Expense Recurrence",
+        "description": "Select how often the expense should repeat.",
+
+        "none": "None",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
       "paidFor": {
         "title": "Paid for",
         "description": "Select who the expense was paid for."
@@ -213,7 +224,7 @@
   "ExpenseDocumentsInput": {
     "TooBigToast": {
       "title": "The file is too big",
-      "description": "The maximum file size you can upload is {maxSize}. Yours is ${size}."
+      "description": "The maximum file size you can upload is {maxSize}. Yours is {size}."
     },
     "ErrorToast": {
       "title": "Error while uploading document",
@@ -238,7 +249,7 @@
     "unknown": "Unknown",
     "TooBigToast": {
       "title": "The file is too big",
-      "description": "The maximum file size you can upload is {maxSize}. Yours is ${size}."
+      "description": "The maximum file size you can upload is {maxSize}. Yours is {size}."
     },
     "ErrorToast": {
       "title": "Error while uploading document",
@@ -360,6 +371,7 @@
       "heading": "Life",
       "Childcare": "Childcare",
       "Clothing": "Clothing",
+      "Donation": "Donation",
       "Education": "Education",
       "Gifts": "Gifts",
       "Insurance": "Insurance",

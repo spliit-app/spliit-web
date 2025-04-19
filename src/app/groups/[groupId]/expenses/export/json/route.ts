@@ -14,6 +14,7 @@ export async function GET(
       currency: true,
       expenses: {
         select: {
+          createdAt: true,
           expenseDate: true,
           title: true,
           category: { select: { grouping: true, name: true } },
@@ -22,7 +23,9 @@ export async function GET(
           paidFor: { select: { participantId: true, shares: true } },
           isReimbursement: true,
           splitMode: true,
+          recurrenceRule: true,
         },
+        orderBy: [{ expenseDate: 'asc' }, { createdAt: 'asc' }],
       },
       participants: { select: { id: true, name: true } },
     },
