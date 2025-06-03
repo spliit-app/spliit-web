@@ -20,6 +20,7 @@
     "create": "Ausgabe hinzufügen",
     "createFirst": "Erstelle die Erste",
     "noExpenses": "Deine Gruppe hat noch keine Ausgaben.",
+    "export": "Exportieren",
     "exportJson": "Als JSON exportieren",
     "exportCsv": "Als CSV exportieren",
     "searchPlaceholder": "Suche nach einer Ausgabe…",
@@ -137,15 +138,6 @@
         "label": "Empfangen von",
         "description": "Wähle das Mitglied, das die Einnahme erhalten hat."
       },
-      "recurrenceRule": {
-        "label": "Expense Recurrence",
-        "description": "Select how often the expense should repeat.",
-
-        "none": "None",
-        "daily": "Daily",
-        "weekly": "Weekly",
-        "monthly": "Monthly"
-      },
       "paidFor": {
         "title": "Empfangen für",
         "description": "Wähle für wen die Einnahme empfangen wurde."
@@ -169,6 +161,15 @@
       "paidByField": {
         "label": "Gezahlt von",
         "description": "Wähle das Mitglied, das die Ausgabe bezahlt hat."
+      },
+      "recurrenceRule": {
+        "label": "Expense Recurrence",
+        "description": "Select how often the expense should repeat.",
+
+        "none": "None",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
       },
       "paidFor": {
         "title": "Gezahlt für",
