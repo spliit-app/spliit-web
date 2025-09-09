@@ -21,6 +21,7 @@ import { useMediaQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Heart, HeartIcon, Loader2, MessageCircle, Wallet } from 'lucide-react'
+import Link from 'next/link'
 import {
   PropsWithChildren,
   ReactNode,
@@ -240,8 +241,11 @@ function DonationForm({ donationUrl }: { donationUrl: string }) {
         <p>By supporting Spliit:</p>
         <ul>
           <li>
-            You contribute to the <strong>hosting costs</strong> for the app
-            (currently ~$150/year).
+            You contribute to the{' '}
+            <Link href="/blog/spliit-by-the-stats-usage-costs-donations">
+              hosting costs
+            </Link>{' '}
+            for the app, ~$150CA/month.
           </li>
           <li>
             You help us keep the application{' '}
