@@ -27,7 +27,12 @@ import {
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 import { useMediaQuery } from '@/lib/hooks'
-import { formatCurrency, formatDate, formatFileSize } from '@/lib/utils'
+import {
+  formatCurrency,
+  formatDate,
+  formatFileSize,
+  getCurrencyFromGroup,
+} from '@/lib/utils'
 import { trpc } from '@/trpc/client'
 import { ChevronRight, FileQuestion, Loader2, Receipt } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -205,7 +210,7 @@ function ReceiptDialogContent() {
                 receiptInfo.amount ? (
                   <>
                     {formatCurrency(
-                      group.currency,
+                      getCurrencyFromGroup(group),
                       receiptInfo.amount,
                       locale,
                       true,

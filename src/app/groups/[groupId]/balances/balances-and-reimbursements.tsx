@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { getCurrencyFromGroup } from '@/lib/utils'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
 import { Fragment, useEffect } from 'react'
@@ -49,7 +50,7 @@ export default function BalancesAndReimbursements() {
             <BalancesList
               balances={balancesData.balances}
               participants={group?.participants}
-              currency={group?.currency}
+              currency={getCurrencyFromGroup(group)}
             />
           )}
         </CardContent>
@@ -68,7 +69,7 @@ export default function BalancesAndReimbursements() {
             <ReimbursementList
               reimbursements={balancesData.reimbursements}
               participants={group?.participants}
-              currency={group?.currency}
+              currency={getCurrencyFromGroup(group)}
               groupId={groupId}
             />
           )}

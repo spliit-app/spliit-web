@@ -17,6 +17,7 @@ function getAcceptLanguageLocale(requestHeaders: Headers, locales: Locales) {
   try {
     locale = match(languages, locales, defaultLocale)
   } catch (e) {
+    // invalid language - fallback to default
     locale = defaultLocale
   }
   return locale

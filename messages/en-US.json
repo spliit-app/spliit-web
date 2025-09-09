@@ -47,8 +47,10 @@
   },
   "ExpenseCard": {
     "paidBy": "Paid by <strong>{paidBy}</strong> for <paidFor></paidFor>",
+    "everyone": "everyone",
     "receivedBy": "Received by <strong>{paidBy}</strong> for <paidFor></paidFor>",
-    "yourBalance": "Your balance:"
+    "yourBalance": "Your balance:",
+    "notInvolved": "You are not involved"
   },
   "Groups": {
     "myGroups": "My groups",
@@ -97,6 +99,12 @@
       "label": "Currency symbol",
       "placeholder": "$, €, £…",
       "description": "We’ll use it to display amounts."
+    },
+    "CurrencyCodeField": {
+      "label": "Main currency",
+      "createDescription": "All amounts and balances will be in this currency.",
+      "editDescription": "All amounts and balances will be in this currency. Changing this will NOT convert expenses already entered, except when the currency has different \"minor units\" than the current one (e.g. changing from US Dollar to Japanese Yen)",
+      "customOption": "Custom"
     },
     "Participants": {
       "title": "Participants",
@@ -164,6 +172,7 @@
       "categoryFieldDescription": "Select the expense category.",
       "paidByField": {
         "label": "Paid by",
+        "placeholder": "Select a participant",
         "description": "Select the participant who paid the expense."
       },
       "recurrenceRule": {
@@ -399,6 +408,19 @@
       "Trash": "Trash",
       "TV/Phone/Internet": "TV/Phone/Internet",
       "Water": "Water"
+    }
+  },
+  "Currencies": {
+    "search": "Search currency...",
+    "noCurrency": "No currencies found.",
+    "custom": {
+      "heading": "Custom"
+    },
+    "common": {
+      "heading": "Most common"
+    },
+    "other": {
+      "heading": "Other currencies"
     }
   }
 }
