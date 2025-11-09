@@ -113,7 +113,7 @@ function Content({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {children}
+      <div className="pt-16 flex-1 flex flex-col">{children}</div>
 
       <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 grid sm:grid-cols-2 gap-4 text-xs [&_a]:underline">
         <div className="flex flex-col space-y-2">
@@ -243,7 +243,7 @@ export default async function RootLayout({
       )}
       <AxiomWebVitals />
       <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
-      <body className="pt-16 min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
+      <body className="min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
