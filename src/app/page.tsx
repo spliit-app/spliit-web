@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { ReactNode } from 'react'
+import { ReactNode, Suspense } from 'react'
 
 // FIX for https://github.com/vercel/next.js/issues/58615
 // export const dynamic = 'force-dynamic'
@@ -150,7 +150,9 @@ export default function HomePage() {
             !
           </p>
           <div className="mt-6">
-            <Contributors />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Contributors />
+            </Suspense>
           </div>
           <div className="mt-4 md:mt-6">
             <Button asChild variant="secondary" size="lg">
