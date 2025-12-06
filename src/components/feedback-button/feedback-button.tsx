@@ -2,8 +2,20 @@
 import { sendFeedback } from '@/components/feedback-button/feedback-button-actions'
 import { formSchema } from '@/components/feedback-button/feedback-button-common'
 import { Button, ButtonProps } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
 import {
   Form,
   FormControl,
@@ -88,6 +100,8 @@ function FeedbackDrawer({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{button}</DrawerTrigger>
       <DrawerContent>
+        <DrawerTitle className="sr-only">Feedback</DrawerTitle>
+        <DrawerDescription className="sr-only"></DrawerDescription>
         <div className="p-4">{children}</div>
       </DrawerContent>
     </Drawer>
@@ -108,6 +122,8 @@ function FeedbackDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{button}</DialogTrigger>
       <DialogContent>
+        <DialogTitle className="sr-only">Feedback</DialogTitle>
+        <DialogDescription className="sr-only"></DialogDescription>
         <div className="pt-4">{children}</div>
       </DialogContent>
     </Dialog>

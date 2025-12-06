@@ -12,10 +12,11 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function OGImage({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
+  const { slug } = await params
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 

@@ -9,10 +9,13 @@ export async function generateStaticParams() {
   return ['rss.xml', 'feed.xml', 'feed.json'].map((type) => ({ type }))
 }
 
-export async function GET(req: Request, context: { params: ParsedUrlQuery }) {
-  const type = context.params.type
+export async function GET(
+  req: Request,
+  context: { params: Promise<ParsedUrlQuery> },
+) {
+  const type = (await context.params).type
   const url = new URL(req.url)
-  const feed = await getFeed(url.origin)
+  const feed = await getFeed(url.origin as string)
 
   switch (type) {
     case 'rss.xml':

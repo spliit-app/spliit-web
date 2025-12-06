@@ -11,6 +11,7 @@ const withNextIntl = createNextIntlPlugin()
 const remotePatterns = [
   { hostname: 'avatars.githubusercontent.com' },
   { hostname: 'basehub.earth' },
+  { hostname: 'assets.basehub.com' },
 ]
 
 // S3 Storage

@@ -1,4 +1,4 @@
-import { basehub, enumBlogPostsItemOrderByEnum } from 'basehub'
+import { basehub } from 'basehub'
 
 export async function getPostBySlug(slug: string) {
   const { blogIndex } = await basehub({ next: { revalidate: 60 } }).query({
@@ -52,7 +52,7 @@ export async function getBlogIndexWithPosts() {
       subtitle: { json: { content: true }, plainText: true },
       blogPosts: {
         __args: {
-          orderBy: enumBlogPostsItemOrderByEnum.date__DESC,
+          orderBy: 'date__DESC',
           filter:
             process.env.NODE_ENV === 'production' ? { isPublished: true } : {},
         },

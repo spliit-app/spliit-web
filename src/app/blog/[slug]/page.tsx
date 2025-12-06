@@ -1,7 +1,7 @@
 import { formatDate, getPostBySlug, getPosts } from '@/app/blog/[slug]/helpers'
 import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
-import { RichText } from 'basehub/react'
+import { RichText } from 'basehub/react-rich-text'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
@@ -17,10 +17,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
+  const { slug } = await params
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
@@ -43,7 +44,8 @@ export async function generateMetadata({
   }
 }
 
-const BlogPage = async ({ params: { slug } }: { params: { slug: string } }) => {
+const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
