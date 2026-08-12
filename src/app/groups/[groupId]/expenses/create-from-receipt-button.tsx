@@ -79,7 +79,7 @@ export function CreateFromReceiptButton() {
 }
 
 function ReceiptDialogContent() {
-  const { group, groupId } = useCurrentGroup()
+  const { group } = useCurrentGroup()
   const { data: categoriesData } = trpc.categories.list.useQuery()
   const categories = categoriesData?.categories
 
@@ -109,7 +109,7 @@ function ReceiptDialogContent() {
     }
 
     const upload = async () => {
-      sendEvent({ event: 'expense: scan receipt', props: { groupId } })
+      sendEvent({ event: 'expense: scan receipt', props: {} })
       try {
         setPending(true)
         console.log('Uploading image…')
@@ -252,7 +252,7 @@ function ReceiptDialogContent() {
             if (!receiptInfo || !group) return
             sendEvent({
               event: 'expense: create from receipt',
-              props: { groupId },
+              props: {},
             })
             router.push(
               `/groups/${group.id}/expenses/create?amount=${

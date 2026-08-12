@@ -1,25 +1,32 @@
 'use client'
 
+import { anonymizePath } from '@/lib/anonymize-path'
 import { usePlausible } from 'next-plausible'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useCallback, useEffect } from 'react'
 
+/**
+ * No properties at all. `{}` would not do: it accepts any object, so it would
+ * silently let a `groupId` through.
+ */
+type NoProps = Record<string, never>
+
+// Group and expense IDs are deliberately absent from every event: they identify
+// a specific user's data, and they are unique per document, so they would only
+// ever produce single-visitor rows. Properties here must stay low-cardinality.
 type Event =
-  | { event: 'pageview'; props: {} }
-  | { event: 'group: create'; props: {} }
-  | { event: 'group: update'; props: { groupId: string } }
-  | { event: 'expense: create'; props: { groupId: string } }
-  | { event: 'expense: scan receipt'; props: { groupId: string } }
-  | { event: 'expense: create from receipt'; props: { groupId: string } }
-  | { event: 'expense: update'; props: { groupId: string; expenseId: string } }
-  | { event: 'expense: delete'; props: { groupId: string; expenseId: string } }
-  | { event: 'group: export expenses'; props: { groupId: string } }
-  | { event: 'news: open menu'; props: {} }
+  | { event: 'pageview'; props: NoProps }
+  | { event: 'group: create'; props: NoProps }
+  | { event: 'group: update'; props: NoProps }
+  | { event: 'expense: create'; props: NoProps }
+  | { event: 'expense: scan receipt'; props: NoProps }
+  | { event: 'expense: create from receipt'; props: NoProps }
+  | { event: 'expense: update'; props: NoProps }
+  | { event: 'expense: delete'; props: NoProps }
+  | { event: 'group: export expenses'; props: NoProps }
+  | { event: 'news: open menu'; props: NoProps }
   | { event: 'news: click news'; props: { news: string } }
-  | {
-      event: 'expense: attach document'
-      props: { groupId: string; expenseId: string | null }
-    }
+  | { event: 'expense: attach document'; props: NoProps }
 
 type Props = {
   path: string
@@ -56,7 +63,9 @@ export function useAnalytics() {
   // re-render (and group pages re-render on every tRPC refetch).
   const sendEvent = useCallback(
     ({ event, props }: Event, path = '/') => {
-      const url = `${window.location.origin}${path}`
+      // Anonymize here rather than at the call sites, so no caller can leak an
+      // ID by passing a path built from `groupId`.
+      const url = `${window.location.origin}${anonymizePath(path)}`
       if (process.env.NODE_ENV !== 'production')
         console.log('Analytics event:', event, props, url)
       plausible(event, { props, u: url })
