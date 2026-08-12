@@ -72,7 +72,7 @@
     "react-intersection-observer": "^10.0.0",
     "resend": "^2.1.0",
     "server-only": "^0.0.1",
-    "sharp": "^0.33.2",
+    "sharp": "^0.35.3",
     "superjson": "^2.2.1",
     "swr": "^2.3.3",
     "tailwind-merge": "^1.14.0",
