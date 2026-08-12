@@ -276,15 +276,12 @@ export function ExpenseForm({
   const submit = async (values: ExpenseFormValues) => {
     if (expense) {
       sendEvent(
-        {
-          event: 'expense: update',
-          props: { groupId: group.id, expenseId: expense.id },
-        },
+        { event: 'expense: update', props: {} },
         `/groups/${group.id}/expenses`,
       )
     } else {
       sendEvent(
-        { event: 'expense: create', props: { groupId: group.id } },
+        { event: 'expense: create', props: {} },
         `/groups/${group.id}/expenses`,
       )
     }
@@ -1277,10 +1274,7 @@ export function ExpenseForm({
                     onDocumentAttached={() => {
                       sendEvent({
                         event: 'expense: attach document',
-                        props: {
-                          groupId: group.id,
-                          expenseId: expense?.id ?? null,
-                        },
+                        props: {},
                       })
                     }}
                   />
@@ -1299,10 +1293,7 @@ export function ExpenseForm({
             <DeletePopup
               onDelete={async () => {
                 sendEvent(
-                  {
-                    event: 'expense: delete',
-                    props: { groupId: group.id, expenseId: expense.id },
-                  },
+                  { event: 'expense: delete', props: {} },
                   `/groups/${group.id}/expenses`,
                 )
                 await onDelete(activeUserId ?? undefined)

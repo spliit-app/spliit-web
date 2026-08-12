@@ -120,7 +120,7 @@ export function GroupForm({
         onSubmit={form.handleSubmit(async (values) => {
           if (group) {
             sendEvent(
-              { event: 'group: update', props: { groupId: group.id } },
+              { event: 'group: update', props: {} },
               `/groups/${group.id}/edit`,
             )
           } else {

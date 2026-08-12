@@ -21,7 +21,7 @@ export const ExportLink = function ExportLink({
       prefetch={false}
       onClick={() => {
         sendEvent(
-          { event: 'group: export expenses', props: { groupId } },
+          { event: 'group: export expenses', props: {} },
           `/groups/${groupId}/expenses`,
         )
       }}
