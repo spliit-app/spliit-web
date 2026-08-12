@@ -1,5 +1,4 @@
 import { SubmitButton } from '@/components/submit-button'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -87,7 +86,6 @@ export function GroupForm({
     name: 'participants',
     keyName: 'key',
   })
-  const sendEvent = useAnalytics()
 
   const [activeUser, setActiveUser] = useState<string | null>(null)
   useEffect(() => {
@@ -118,14 +116,6 @@ export function GroupForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (values) => {
-          if (group) {
-            sendEvent(
-              { event: 'group: update', props: {} },
-              `/groups/${group.id}/edit`,
-            )
-          } else {
-            sendEvent({ event: 'group: create', props: {} }, `/groups`)
-          }
           await onSubmit(
             values,
             group?.participants.find((p) => p.name === activeUser)?.id ??

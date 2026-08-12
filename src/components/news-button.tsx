@@ -1,5 +1,4 @@
 'use client'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -306,8 +305,6 @@ export function NewsButton() {
     }
   }, [alreadySeenLoaded, alreadySeen])
 
-  const sendEvent = useAnalytics()
-
   return (
     <>
       <div className="">
@@ -320,7 +317,6 @@ export function NewsButton() {
         <Popover
           onOpenChange={(open) => {
             if (open) {
-              sendEvent({ event: 'news: open menu', props: {} })
               setAlreadySeen(news.map((newsItem) => newsItem.id))
               setPing(false)
             }
@@ -341,10 +337,6 @@ export function NewsButton() {
                   <NewsListItem
                     news={newsItem}
                     onClick={() => {
-                      sendEvent({
-                        event: 'news: click news',
-                        props: { news: newsItem.id },
-                      })
                       setOpenNews(newsItem)
                     }}
                   />

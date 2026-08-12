@@ -5,7 +5,6 @@ import {
   ReceiptExtractedInfo,
   extractExpenseInformationFromImage,
 } from '@/app/groups/[groupId]/expenses/create-from-receipt-button-actions'
-import { useAnalytics } from '@/components/track-page'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -93,7 +92,6 @@ function ReceiptDialogContent() {
     | null
     | (ReceiptExtractedInfo & { url: string; width?: number; height?: number })
   >(null)
-  const sendEvent = useAnalytics()
 
   const handleFileChange = async (file: File) => {
     if (file.size > MAX_FILE_SIZE) {
@@ -109,7 +107,6 @@ function ReceiptDialogContent() {
     }
 
     const upload = async () => {
-      sendEvent({ event: 'expense: scan receipt', props: {} })
       try {
         setPending(true)
         console.log('Uploading image…')
@@ -250,10 +247,6 @@ function ReceiptDialogContent() {
           disabled={pending || !receiptInfo}
           onClick={() => {
             if (!receiptInfo || !group) return
-            sendEvent({
-              event: 'expense: create from receipt',
-              props: {},
-            })
             router.push(
               `/groups/${group.id}/expenses/create?amount=${
                 receiptInfo.amount

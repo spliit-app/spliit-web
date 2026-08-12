@@ -2,7 +2,6 @@
 
 import { BalancesList } from '@/app/groups/[groupId]/balances-list'
 import { ReimbursementList } from '@/app/groups/[groupId]/reimbursement-list'
-import { TrackPage } from '@/components/track-page'
 import {
   Card,
   CardContent,
@@ -37,7 +36,6 @@ export default function BalancesAndReimbursements() {
 
   return (
     <>
-      <TrackPage path={`/groups/${groupId}/balances`} />
       <Card className="mb-4">
         <CardHeader>
           <CardTitle>{t('title')}</CardTitle>

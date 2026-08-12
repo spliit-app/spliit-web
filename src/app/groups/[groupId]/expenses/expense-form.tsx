@@ -2,7 +2,6 @@ import { CategorySelector } from '@/components/category-selector'
 import { CurrencySelector } from '@/components/currency-selector'
 import { ExpenseDocumentsInput } from '@/components/expense-documents-input'
 import { SubmitButton } from '@/components/submit-button'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -269,23 +268,10 @@ export function ExpenseForm({
           recurrenceRule: RecurrenceRule.NONE,
         },
   })
-  const sendEvent = useAnalytics()
   const [isCategoryLoading, setCategoryLoading] = useState(false)
   const activeUserId = useActiveUser(group.id)
 
   const submit = async (values: ExpenseFormValues) => {
-    if (expense) {
-      sendEvent(
-        { event: 'expense: update', props: {} },
-        `/groups/${group.id}/expenses`,
-      )
-    } else {
-      sendEvent(
-        { event: 'expense: create', props: {} },
-        `/groups/${group.id}/expenses`,
-      )
-    }
-
     await persistDefaultSplittingOptions(group.id, values)
 
     // Store monetary amounts in minor units (cents)
@@ -1271,12 +1257,6 @@ export function ExpenseForm({
                   <ExpenseDocumentsInput
                     documents={field.value}
                     updateDocuments={field.onChange}
-                    onDocumentAttached={() => {
-                      sendEvent({
-                        event: 'expense: attach document',
-                        props: {},
-                      })
-                    }}
                   />
                 )}
               />
@@ -1290,15 +1270,7 @@ export function ExpenseForm({
             {t(isCreate ? 'create' : 'save')}
           </SubmitButton>
           {!isCreate && onDelete && (
-            <DeletePopup
-              onDelete={async () => {
-                sendEvent(
-                  { event: 'expense: delete', props: {} },
-                  `/groups/${group.id}/expenses`,
-                )
-                await onDelete(activeUserId ?? undefined)
-              }}
-            />
+            <DeletePopup onDelete={() => onDelete(activeUserId ?? undefined)} />
           )}
           <Button variant="ghost" asChild>
             <Link href={`/groups/${group.id}`}>{t('cancel')}</Link>

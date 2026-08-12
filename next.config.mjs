@@ -1,6 +1,5 @@
 import { withAxiom } from 'next-axiom'
 import createNextIntlPlugin from 'next-intl/plugin'
-import { withPlausibleProxy } from 'next-plausible'
 
 const withNextIntl = createNextIntlPlugin()
 
@@ -41,4 +40,4 @@ const nextConfig = {
   },
 }
 
-export default withAxiom(withPlausibleProxy()(withNextIntl(nextConfig)))
+export default withAxiom(withNextIntl(nextConfig))
