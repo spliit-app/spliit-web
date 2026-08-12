@@ -1,7 +1,6 @@
 import { Contributors } from '@/app/contributors'
 import { StatsDisplay } from '@/app/stats-display'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
-import { TrackPage } from '@/components/track-page'
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { TrackPage } from '@/lib/analytics/track-page'
 import { env } from '@/lib/env'
 import {
   BarChartHorizontalBig,

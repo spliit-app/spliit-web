@@ -29,6 +29,7 @@ import { useEffect, useState } from 'react'
 type Props = {
   documents: ExpenseFormValues['documents']
   updateDocuments: (documents: ExpenseFormValues['documents']) => void
+  /** Called once per document successfully uploaded. */
   onDocumentAttached?: () => void
 }
 

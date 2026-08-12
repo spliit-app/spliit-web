@@ -1,5 +1,4 @@
 'use client'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -20,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { useAnalytics } from '@/lib/analytics/context'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
@@ -292,6 +292,7 @@ const news: News[] = [
 
 export function NewsButton() {
   const [openNews, setOpenNews] = useState<News | null>(null)
+  const sendEvent = useAnalytics()
 
   const [ping, setPing] = useState(false)
   const [alreadySeen, setAlreadySeen, alreadySeenLoaded] = useLocalStorageState<
@@ -305,8 +306,6 @@ export function NewsButton() {
       setPing(news.some((news) => !alreadySeen?.includes(news.id)))
     }
   }, [alreadySeenLoaded, alreadySeen])
-
-  const sendEvent = useAnalytics()
 
   return (
     <>

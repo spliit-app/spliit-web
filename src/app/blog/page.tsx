@@ -1,6 +1,6 @@
 import { formatDate, getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
-import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
+import { TrackPage } from '@/lib/analytics/track-page'
 import { basehub } from 'basehub'
 import { RichText } from 'basehub/react-rich-text'
 import { ChevronRight } from 'lucide-react'
