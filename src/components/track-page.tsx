@@ -27,6 +27,8 @@ type Event =
   | { event: 'news: open menu'; props: NoProps }
   | { event: 'news: click news'; props: { news: string } }
   | { event: 'expense: attach document'; props: NoProps }
+  // Same name Plausible's built-in tracking used, so history stays comparable.
+  | { event: 'Outbound Link: Click'; props: { url: string } }
 
 type Props = {
   path: string
@@ -51,6 +53,47 @@ function TrackPage_({ path }: Props) {
       `${path}${ref ? `?ref=${ref}` : ''}`,
     )
   }, [path, ref, sendEvent])
+
+  return null
+}
+
+/**
+ * Replaces Plausible's built-in `trackOutboundLinks`. That one sends the event
+ * without a URL, so Plausible falls back to `location.href` — which on a group
+ * page carries the group ID. Sending it ourselves routes it through
+ * `useAnalytics`, which anonymizes the path.
+ *
+ * Only the pathname is reported: the expense creation route carries the title
+ * and amount in its query string, and those don't belong in analytics either.
+ */
+export function TrackOutboundLinks() {
+  const sendEvent = useAnalytics()
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      // Middle-click only, matching Plausible's own handler.
+      if (event.type === 'auxclick' && event.button !== 1) return
+      if (!(event.target instanceof Element)) return
+
+      const anchor = event.target.closest('a')
+      // `href` is not a string on SVG anchors, and `host` is empty for
+      // `mailto:` and `tel:` links.
+      if (typeof anchor?.href !== 'string') return
+      if (!anchor.host || anchor.host === window.location.host) return
+
+      sendEvent(
+        { event: 'Outbound Link: Click', props: { url: anchor.href } },
+        window.location.pathname,
+      )
+    }
+
+    document.addEventListener('click', handleClick)
+    document.addEventListener('auxclick', handleClick)
+    return () => {
+      document.removeEventListener('click', handleClick)
+      document.removeEventListener('auxclick', handleClick)
+    }
+  }, [sendEvent])
 
   return null
 }

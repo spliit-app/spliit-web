@@ -37,7 +37,10 @@ describe('anonymizePath', () => {
     ['/', '/'],
     ['/groups', '/groups'],
     ['/blog', '/blog'],
-    ['/blog/we-need-an-open-source-alternative', '/blog/we-need-an-open-source-alternative'],
+    [
+      '/blog/we-need-an-open-source-alternative',
+      '/blog/we-need-an-open-source-alternative',
+    ],
   ]
 
   test.each(cases)('%s → %s', (path, expected) => {

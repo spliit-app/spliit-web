@@ -6,6 +6,7 @@ import { NewsButton } from '@/components/news-button'
 import { ProgressBar } from '@/components/progress-bar'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { TrackOutboundLinks } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
@@ -235,11 +236,10 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       {env.PLAUSIBLE_DOMAIN && (
-        <PlausibleProvider
-          domain={env.PLAUSIBLE_DOMAIN}
-          trackOutboundLinks
-          manualPageviews
-        />
+        // Outbound links are tracked by `TrackOutboundLinks` rather than by
+        // Plausible's `trackOutboundLinks`, which would attach the raw URL of
+        // the current page — including the group ID.
+        <PlausibleProvider domain={env.PLAUSIBLE_DOMAIN} manualPageviews />
       )}
       <AxiomWebVitals />
       <ApplePwaSplash icon="/logo-with-text.png" color="#027756" />
@@ -254,6 +254,7 @@ export default async function RootLayout({
             <Suspense>
               <ProgressBar />
             </Suspense>
+            {env.PLAUSIBLE_DOMAIN && <TrackOutboundLinks />}
             <Content>{children}</Content>
           </ThemeProvider>
         </NextIntlClientProvider>
