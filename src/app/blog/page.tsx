@@ -1,5 +1,6 @@
 import { formatDate, getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
 import { Button } from '@/components/ui/button'
+import { TrackPage } from '@/lib/analytics/track-page'
 import { basehub } from 'basehub'
 import { RichText } from 'basehub/react-rich-text'
 import { ChevronRight } from 'lucide-react'
@@ -43,6 +44,7 @@ export default async function BlogPage() {
 
   return (
     <div>
+      <TrackPage path="/blog" />
       <h1 className="text-4xl font-extrabold mt-4 mb-8">{blogIndex.title}</h1>
       <div className="mb-12 prose dark:prose-invert">
         <RichText>{blogIndex.subtitle?.json.content}</RichText>

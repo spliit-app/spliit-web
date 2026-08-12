@@ -38,6 +38,24 @@ const nextConfig = {
       allowedOrigins: ['localhost:3000'],
     },
   },
+  /**
+   * Serves Plausible from our own origin, so that ad blockers do not drop it.
+   * These replace `withPlausibleProxy()`, which came with next-plausible, and
+   * produce the same two URLs it did. `PLAUSIBLE_SCRIPT_URL` and
+   * `PLAUSIBLE_API_URL` point the analytics provider at them.
+   */
+  async rewrites() {
+    return [
+      {
+        source: '/js/script.manual.js',
+        destination: 'https://plausible.io/js/script.manual.js',
+      },
+      {
+        source: '/proxy/api/event',
+        destination: 'https://plausible.io/api/event',
+      },
+    ]
+  },
 }
 
 export default withAxiom(withNextIntl(nextConfig))

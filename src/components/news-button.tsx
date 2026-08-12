@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { useAnalytics } from '@/lib/analytics/context'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
@@ -291,6 +292,7 @@ const news: News[] = [
 
 export function NewsButton() {
   const [openNews, setOpenNews] = useState<News | null>(null)
+  const sendEvent = useAnalytics()
 
   const [ping, setPing] = useState(false)
   const [alreadySeen, setAlreadySeen, alreadySeenLoaded] = useLocalStorageState<
@@ -317,6 +319,7 @@ export function NewsButton() {
         <Popover
           onOpenChange={(open) => {
             if (open) {
+              sendEvent({ event: 'news: open menu', props: {} })
               setAlreadySeen(news.map((newsItem) => newsItem.id))
               setPing(false)
             }
@@ -337,6 +340,10 @@ export function NewsButton() {
                   <NewsListItem
                     news={newsItem}
                     onClick={() => {
+                      sendEvent({
+                        event: 'news: click news',
+                        props: { news: newsItem.id },
+                      })
                       setOpenNews(newsItem)
                     }}
                   />

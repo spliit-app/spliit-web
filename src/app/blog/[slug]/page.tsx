@@ -1,5 +1,6 @@
 import { formatDate, getPostBySlug, getPosts } from '@/app/blog/[slug]/helpers'
 import { Button } from '@/components/ui/button'
+import { TrackPage } from '@/lib/analytics/track-page'
 import { RichText } from 'basehub/react-rich-text'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -50,6 +51,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
   return (
     <>
+      <TrackPage path={`/blog/${slug}`} />
       <div>
         <Button variant="link" asChild className="-ml-4">
           <Link href="/blog">

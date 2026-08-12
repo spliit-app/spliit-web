@@ -20,15 +20,13 @@ type BaseAnalyticsEvent =
   | { event: 'expense: create from receipt'; props: NoProps }
 
 /**
- * Extension point for forks: replace `never` with your own events, e.g.
- *
- *     type CustomAnalyticsEvent =
- *       | { event: 'news: open menu'; props: NoProps }
- *       | { event: 'news: click news'; props: { news: string } }
- *
- * Keep it to this one declaration so rebases on upstream stay conflict-free:
- * upstream only ever edits the union above.
+ * Events specific to this instance. Upstream only ever edits the union above,
+ * so keeping ours to this one declaration keeps future merges conflict-free.
  */
-type CustomAnalyticsEvent = never
+type CustomAnalyticsEvent =
+  | { event: 'news: open menu'; props: NoProps }
+  // The news ID identifies a piece of content rather than a user, and there are
+  // only ever a handful of them, so it stays low-cardinality.
+  | { event: 'news: click news'; props: { news: string } }
 
 export type AnalyticsEvent = BaseAnalyticsEvent | CustomAnalyticsEvent
