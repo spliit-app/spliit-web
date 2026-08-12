@@ -5,7 +5,6 @@ import {
   ReceiptExtractedInfo,
   extractExpenseInformationFromImage,
 } from '@/app/groups/[groupId]/expenses/create-from-receipt-button-actions'
-import { useAnalytics } from '@/components/track-page'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,6 +25,7 @@ import {
 } from '@/components/ui/drawer'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
+import { useAnalytics } from '@/lib/analytics/context'
 import { useMediaQuery } from '@/lib/hooks'
 import {
   formatCurrency,
@@ -79,7 +79,8 @@ export function CreateFromReceiptButton() {
 }
 
 function ReceiptDialogContent() {
-  const { group } = useCurrentGroup()
+  const { groupId, group } = useCurrentGroup()
+  const sendEvent = useAnalytics()
   const { data: categoriesData } = trpc.categories.list.useQuery()
   const categories = categoriesData?.categories
 
@@ -93,7 +94,6 @@ function ReceiptDialogContent() {
     | null
     | (ReceiptExtractedInfo & { url: string; width?: number; height?: number })
   >(null)
-  const sendEvent = useAnalytics()
 
   const handleFileChange = async (file: File) => {
     if (file.size > MAX_FILE_SIZE) {
@@ -109,7 +109,10 @@ function ReceiptDialogContent() {
     }
 
     const upload = async () => {
-      sendEvent({ event: 'expense: scan receipt', props: {} })
+      sendEvent(
+        { event: 'expense: scan receipt', props: {} },
+        `/groups/${groupId}/expenses`,
+      )
       try {
         setPending(true)
         console.log('Uploading image…')
@@ -250,10 +253,10 @@ function ReceiptDialogContent() {
           disabled={pending || !receiptInfo}
           onClick={() => {
             if (!receiptInfo || !group) return
-            sendEvent({
-              event: 'expense: create from receipt',
-              props: {},
-            })
+            sendEvent(
+              { event: 'expense: create from receipt', props: {} },
+              `/groups/${groupId}/expenses`,
+            )
             router.push(
               `/groups/${group.id}/expenses/create?amount=${
                 receiptInfo.amount

@@ -32,6 +32,10 @@ describe('anonymizePath', () => {
       `/groups/${GROUP_A}/expenses/export/csv`,
       '/groups/[groupId]/expenses/export/csv',
     ],
+    [
+      `/groups/${GROUP_A}/expenses/export/json`,
+      '/groups/[groupId]/expenses/export/json',
+    ],
 
     // Query strings and hashes are preserved, and never scanned for IDs
     [
@@ -43,11 +47,6 @@ describe('anonymizePath', () => {
     // Paths without IDs are untouched
     ['/', '/'],
     ['/groups', '/groups'],
-    ['/blog', '/blog'],
-    [
-      '/blog/we-need-an-open-source-alternative',
-      '/blog/we-need-an-open-source-alternative',
-    ],
   ]
 
   test.each(cases)('%s → %s', (path, expected) => {

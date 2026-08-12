@@ -1,6 +1,6 @@
 import { formatDate, getPostBySlug, getPosts } from '@/app/blog/[slug]/helpers'
-import { TrackPage } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
+import { TrackPage } from '@/lib/analytics/track-page'
 import { RichText } from 'basehub/react-rich-text'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'

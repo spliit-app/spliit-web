@@ -1,5 +1,4 @@
 'use client'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -20,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { useAnalytics } from '@/lib/analytics/context'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {

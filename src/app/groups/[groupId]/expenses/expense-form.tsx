@@ -2,7 +2,6 @@ import { CategorySelector } from '@/components/category-selector'
 import { CurrencySelector } from '@/components/currency-selector'
 import { ExpenseDocumentsInput } from '@/components/expense-documents-input'
 import { SubmitButton } from '@/components/submit-button'
-import { useAnalytics } from '@/components/track-page'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -35,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Locale } from '@/i18n/request'
+import { useAnalytics } from '@/lib/analytics/context'
 import { randomId } from '@/lib/api'
 import { defaultCurrencyList, getCurrency } from '@/lib/currency'
 import { RuntimeFeatureFlags } from '@/lib/featureFlags'
@@ -269,22 +269,15 @@ export function ExpenseForm({
           recurrenceRule: RecurrenceRule.NONE,
         },
   })
-  const sendEvent = useAnalytics()
   const [isCategoryLoading, setCategoryLoading] = useState(false)
   const activeUserId = useActiveUser(group.id)
+  const sendEvent = useAnalytics()
 
   const submit = async (values: ExpenseFormValues) => {
-    if (expense) {
-      sendEvent(
-        { event: 'expense: update', props: {} },
-        `/groups/${group.id}/expenses`,
-      )
-    } else {
-      sendEvent(
-        { event: 'expense: create', props: {} },
-        `/groups/${group.id}/expenses`,
-      )
-    }
+    sendEvent(
+      { event: expense ? 'expense: update' : 'expense: create', props: {} },
+      `/groups/${group.id}/expenses`,
+    )
 
     await persistDefaultSplittingOptions(group.id, values)
 
@@ -1271,12 +1264,12 @@ export function ExpenseForm({
                   <ExpenseDocumentsInput
                     documents={field.value}
                     updateDocuments={field.onChange}
-                    onDocumentAttached={() => {
-                      sendEvent({
-                        event: 'expense: attach document',
-                        props: {},
-                      })
-                    }}
+                    onDocumentAttached={() =>
+                      sendEvent(
+                        { event: 'expense: attach document', props: {} },
+                        `/groups/${group.id}/expenses`,
+                      )
+                    }
                   />
                 )}
               />
@@ -1298,7 +1291,7 @@ export function ExpenseForm({
                 )
                 await onDelete(activeUserId ?? undefined)
               }}
-            />
+            ></DeletePopup>
           )}
           <Button variant="ghost" asChild>
             <Link href={`/groups/${group.id}`}>{t('cancel')}</Link>
