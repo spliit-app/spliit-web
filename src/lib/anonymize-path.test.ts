@@ -1,34 +1,41 @@
 import { anonymizePath } from './anonymize-path'
 
+/**
+ * Made-up IDs, shaped like the real ones (21-character nanoid for groups, cuid
+ * for expenses). Never paste a real ID in here: this file is public.
+ */
+const GROUP_A = 'exampleGroupId0000000'
+const GROUP_B = 'anotherGroupId0000000'
+const GROUP_C = 'thirdGroupId000000000'
+const GROUP_D = 'fourthGroupId00000000'
+const EXPENSE = 'exampleExpenseId000000000'
+
 describe('anonymizePath', () => {
   const cases: [path: string, expected: string][] = [
     // Group IDs
-    ['/groups/gElKwDeZwPuBWR7zj4sr3', '/groups/[groupId]'],
-    ['/groups/gElKwDeZwPuBWR7zj4sr3/expenses', '/groups/[groupId]/expenses'],
-    ['/groups/52Xv_FFAu5Q1qm_ekbPT8/balances', '/groups/[groupId]/balances'],
-    ['/groups/Isf80VvaN2bBbWwSw3OqK/edit', '/groups/[groupId]/edit'],
-    ['/groups/9j4Exo1Khb4v8ynK4GPxt/stats', '/groups/[groupId]/stats'],
+    [`/groups/${GROUP_A}`, '/groups/[groupId]'],
+    [`/groups/${GROUP_A}/expenses`, '/groups/[groupId]/expenses'],
+    [`/groups/${GROUP_B}/balances`, '/groups/[groupId]/balances'],
+    [`/groups/${GROUP_C}/edit`, '/groups/[groupId]/edit'],
+    [`/groups/${GROUP_D}/stats`, '/groups/[groupId]/stats'],
 
     // Expense IDs
     [
-      '/groups/gElKwDeZwPuBWR7zj4sr3/expenses/cm5xk2p9r000108l3h1a2b3c4/edit',
+      `/groups/${GROUP_A}/expenses/${EXPENSE}/edit`,
       '/groups/[groupId]/expenses/[expenseId]/edit',
     ],
 
     // Static segments in an ID position are kept
     ['/groups/create', '/groups/create'],
+    [`/groups/${GROUP_A}/expenses/create`, '/groups/[groupId]/expenses/create'],
     [
-      '/groups/gElKwDeZwPuBWR7zj4sr3/expenses/create',
-      '/groups/[groupId]/expenses/create',
-    ],
-    [
-      '/groups/gElKwDeZwPuBWR7zj4sr3/expenses/export/csv',
+      `/groups/${GROUP_A}/expenses/export/csv`,
       '/groups/[groupId]/expenses/export/csv',
     ],
 
     // Query strings and hashes are preserved, and never scanned for IDs
     [
-      '/groups/gElKwDeZwPuBWR7zj4sr3/expenses?ref=share',
+      `/groups/${GROUP_A}/expenses?ref=share`,
       '/groups/[groupId]/expenses?ref=share',
     ],
     ['/groups/create?ref=share', '/groups/create?ref=share'],
@@ -48,7 +55,7 @@ describe('anonymizePath', () => {
   })
 
   it('is idempotent', () => {
-    const once = anonymizePath('/groups/gElKwDeZwPuBWR7zj4sr3/expenses')
+    const once = anonymizePath(`/groups/${GROUP_A}/expenses`)
     expect(anonymizePath(once)).toBe(once)
   })
 })

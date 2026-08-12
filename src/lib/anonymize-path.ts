@@ -11,7 +11,7 @@ const EXPENSE_ROUTES = new Set(['create', 'export'])
  * they are unique per document, which also turns the pages report into thousands
  * of one-visitor rows.
  *
- * `/groups/gElKwDeZwPuBWR7zj4sr3/expenses` → `/groups/[groupId]/expenses`
+ * `/groups/exampleGroupId0000000/expenses` → `/groups/[groupId]/expenses`
  */
 export function anonymizePath(path: string): string {
   const [pathname, ...rest] = path.split(/(?=[?#])/)
