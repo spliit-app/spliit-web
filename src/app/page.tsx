@@ -10,7 +10,6 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
-import { env } from '@/lib/env'
 import {
   BarChartHorizontalBig,
   Calendar,
@@ -234,16 +233,15 @@ export default function HomePage() {
                   </>
                 }
               >
-                You can give us feedback by using{' '}
-                <FeedbackModal donationUrl={env.STRIPE_DONATION_LINK}>
+                You can give us feedback by starting a conversation on{' '}
+                <FeedbackModal>
                   <Button variant="link" className="text-base -mx-4 -my-4">
-                    our feedback form
+                    our Open Collective page
                   </Button>
                 </FeedbackModal>
-                . We’ll receive it by email and will keep you update, if you
-                want to provide your email. But even better, if you know GitHub
-                and have an account, you can report issues or suggest a feature
-                by{' '}
+                . Conversations are public, so anyone in the community can read
+                them and reply. But even better, if you know GitHub and have an
+                account, you can report issues or suggest a feature by{' '}
                 <a
                   target="_blank"
                   href="https://github.com/spliit-app/spliit/issues"
@@ -265,10 +263,7 @@ export default function HomePage() {
                   </li>
                   <li>
                     You can{' '}
-                    <FeedbackModal
-                      donationUrl={env.STRIPE_DONATION_LINK}
-                      defaultTab="support"
-                    >
+                    <FeedbackModal defaultTab="support">
                       <Button
                         variant="link"
                         className="text-base text-pink-600 -mx-4 -my-4"
@@ -276,7 +271,7 @@ export default function HomePage() {
                         support our hosting costs
                       </Button>
                     </FeedbackModal>{' '}
-                    by sponsoring us or donating a small amount,
+                    by contributing on Open Collective,
                   </li>
                   <li>
                     If you’re a developer, you can implement new features or

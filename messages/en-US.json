@@ -16,7 +16,27 @@
     "onOurBlog": "On our blog"
   },
   "Support": {
-    "buttonLabel": "Support us"
+    "buttonLabel": "Support us",
+    "title": "Support us",
+    "description": "Help keep <strong>Spliit</strong> free and without ads!",
+    "intro": "Spliit is offered for free, but costs money and energy. If you like the app, you can support it on Open Collective, with a one-time donation or a monthly contribution.",
+    "benefitsIntro": "By supporting Spliit:",
+    "benefitHosting": "You contribute to the <link>hosting costs</link> for the app, ~$150CA/month.",
+    "benefitAds": "You help us keep the application <strong>free and without ads</strong>.",
+    "benefitFeatures": "You give me energy to build <strong>new features</strong> and improve the application.",
+    "transparency": "Everything stays transparent: on Open Collective, contributions and expenses are public.",
+    "contribute": "Contribute",
+    "donate": "One-time donation"
+  },
+  "Feedback": {
+    "modalTitle": "Feedback and support",
+    "tabLabel": "Give feedback",
+    "title": "Give us your feedback",
+    "description": "We are always working to improve the user experience, and your feedback helps us a lot.",
+    "intro": "Feedback happens in the open, on our Open Collective page. Start a conversation to share an idea, ask a question, or tell us what doesn’t work: anyone in the community can read it and reply. Posting requires a free Open Collective account.",
+    "github": "If you’re a developer, you can also <link>report an issue on GitHub</link>.",
+    "start": "Start a conversation",
+    "browse": "Browse conversations"
   },
   "Expenses": {
     "title": "Expenses",
