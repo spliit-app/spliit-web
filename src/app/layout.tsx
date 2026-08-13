@@ -191,10 +191,7 @@ function Content({ children }: { children: React.ReactNode }) {
               </ul>
             </span>
             <span>
-              <FeedbackModal
-                donationUrl={env.STRIPE_DONATION_LINK}
-                defaultTab="support"
-              >
+              <FeedbackModal defaultTab="support">
                 <Button variant="link" className="text-pink-600 -mx-4">
                   <HeartFilledIcon className="w-4 h-4 mr-2" />
                   {t('Support.buttonLabel')}

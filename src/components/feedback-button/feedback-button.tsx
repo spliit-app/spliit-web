@@ -1,6 +1,4 @@
 'use client'
-import { sendFeedback } from '@/components/feedback-button/feedback-button-actions'
-import { formSchema } from '@/components/feedback-button/feedback-button-common'
 import { Button, ButtonProps } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,23 +14,19 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/components/ui/use-toast'
 import { useMediaQuery } from '@/lib/hooks'
+import { openCollective } from '@/lib/opencollective'
 import { cn } from '@/lib/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Heart, HeartIcon, Loader2, MessageCircle, Wallet } from 'lucide-react'
+import {
+  Heart,
+  HeartIcon,
+  MessageCircle,
+  MessageCirclePlus,
+  MessagesSquare,
+  Wallet,
+} from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import {
   PropsWithChildren,
@@ -42,46 +36,23 @@ import {
   forwardRef,
   useState,
 } from 'react'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-
-type FormValues = z.infer<typeof formSchema>
 
 type Props = {
-  donationUrl: string
   defaultTab?: 'feedback' | 'support'
 }
 
 export function FeedbackModal({
-  donationUrl,
   defaultTab = 'feedback',
   children,
 }: PropsWithChildren<Props>) {
-  const { toast } = useToast()
   const isDesktop = useMediaQuery('(min-width: 640px)')
   const [open, setOpen] = useState(false)
-
-  async function onSubmit(values: FormValues) {
-    await sendFeedback(values)
-    toast({
-      title: 'Thank you for your feedback!',
-      description:
-        'We will have a look at it as soon as possible, and will get back to you if needed.',
-    })
-  }
 
   const Wrapper = isDesktop ? FeedbackDialog : FeedbackDrawer
 
   return (
     <Wrapper open={open} setOpen={setOpen} button={children}>
-      <FeedbackContent
-        onSubmit={async (values) => {
-          await onSubmit(values)
-          setOpen(false)
-        }}
-        donationUrl={donationUrl}
-        defaultTab={defaultTab}
-      />
+      <FeedbackContent defaultTab={defaultTab} />
     </Wrapper>
   )
 }
@@ -96,11 +67,14 @@ function FeedbackDrawer({
   setOpen: (open: SetStateAction<boolean>) => void
   button: ReactNode
 }>) {
+  const t = useTranslations()
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{button}</DrawerTrigger>
       <DrawerContent>
-        <DrawerTitle className="sr-only">Feedback</DrawerTitle>
+        <DrawerTitle className="sr-only">
+          {t('Feedback.modalTitle')}
+        </DrawerTitle>
         <DrawerDescription className="sr-only"></DrawerDescription>
         <div className="p-4">{children}</div>
       </DrawerContent>
@@ -118,11 +92,14 @@ function FeedbackDialog({
   setOpen: (open: SetStateAction<boolean>) => void
   button: ReactNode
 }>) {
+  const t = useTranslations()
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{button}</DialogTrigger>
       <DialogContent>
-        <DialogTitle className="sr-only">Feedback</DialogTitle>
+        <DialogTitle className="sr-only">
+          {t('Feedback.modalTitle')}
+        </DialogTitle>
         <DialogDescription className="sr-only"></DialogDescription>
         <div className="pt-4">{children}</div>
       </DialogContent>
@@ -131,160 +108,129 @@ function FeedbackDialog({
 }
 
 function FeedbackContent({
-  onSubmit,
-  donationUrl,
   defaultTab,
 }: {
-  onSubmit: (values: FormValues) => Promise<void>
-  donationUrl: string
   defaultTab: 'feedback' | 'support'
 }) {
+  const t = useTranslations()
   return (
     <Tabs defaultValue={defaultTab}>
       <div className="mt-2 mb-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="feedback">Give feedback</TabsTrigger>
-          <TabsTrigger value="support">Support us</TabsTrigger>
+          <TabsTrigger value="feedback">{t('Feedback.tabLabel')}</TabsTrigger>
+          <TabsTrigger value="support">{t('Support.buttonLabel')}</TabsTrigger>
         </TabsList>
       </div>
       <TabsContent value="feedback">
-        <FeedbackForm onSubmit={onSubmit} />
+        <FeedbackPanel />
       </TabsContent>
       <TabsContent value="support">
-        <DonationForm donationUrl={donationUrl} />
+        <SupportPanel />
       </TabsContent>
     </Tabs>
   )
 }
 
-function FeedbackForm({
-  onSubmit,
-}: {
-  onSubmit: (values: FormValues) => Promise<void>
-}) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { email: '', message: '' },
-  })
-
-  const isSubmitting = form.formState.isSubmitting
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-        <div>
-          <h2 className="text-lg font-semibold leading-none tracking-tight pb-1.5">
-            Give us your feedback
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            We are always working to improve the user experience, and your
-            feedback helps us a lot.
-          </p>
-        </div>
-        <div className="grid gap-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Your email address</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="your@email.com"
-                    className="text-base"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Optional. Provide it if you want us to get back to you.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="message"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Your feedback</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Enter your feedback"
-                    className="text-base"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="text-center mt-1">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting…
-              </>
-            ) : (
-              <>
-                <MessageCircle className="w-4 h-4 mr-2" /> Send
-              </>
-            )}
-          </Button>
-        </div>
-      </form>
-    </Form>
-  )
-}
-
-function DonationForm({ donationUrl }: { donationUrl: string }) {
+function FeedbackPanel() {
+  const t = useTranslations()
   return (
     <div className="flex flex-col gap-4">
       <div>
         <h2 className="text-lg font-semibold leading-none tracking-tight pb-1.5">
-          Support us
+          {t('Feedback.title')}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Help keep <strong>Spliit</strong> free and without ads!
+          {t('Feedback.description')}
         </p>
       </div>
       <div className="prose prose-sm dark:prose-invert">
+        <p>{t('Feedback.intro')}</p>
         <p>
-          Spliit is offered for free, but costs money and energy. If you like
-          the app, you can choose to support it by sponsoring me (Sebastien) or
-          with a one-time small donation.
+          {t.rich('Feedback.github', {
+            link: (txt) => (
+              <a
+                href="https://github.com/spliit-app/spliit/issues"
+                target="_blank"
+                rel="noopener"
+              >
+                {txt}
+              </a>
+            ),
+          })}
         </p>
-        <p>By supporting Spliit:</p>
+      </div>
+      <div className="flex justify-center gap-2">
+        <Button asChild>
+          <a
+            href={openCollective.newConversation}
+            target="_blank"
+            rel="noopener"
+          >
+            <MessageCirclePlus className="w-4 h-4 mr-2" /> {t('Feedback.start')}
+          </a>
+        </Button>
+        <Button asChild variant="secondary">
+          <a href={openCollective.conversations} target="_blank" rel="noopener">
+            <MessagesSquare className="w-4 h-4 mr-2" /> {t('Feedback.browse')}
+          </a>
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function SupportPanel() {
+  const t = useTranslations()
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h2 className="text-lg font-semibold leading-none tracking-tight pb-1.5">
+          {t('Support.title')}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          {t.rich('Support.description', {
+            strong: (txt) => <strong>{txt}</strong>,
+          })}
+        </p>
+      </div>
+      <div className="prose prose-sm dark:prose-invert">
+        <p>{t('Support.intro')}</p>
+        <p>{t('Support.benefitsIntro')}</p>
         <ul>
           <li>
-            You contribute to the{' '}
-            <Link href="/blog/spliit-by-the-stats-usage-costs-donations">
-              hosting costs
-            </Link>{' '}
-            for the app, ~$150CA/month.
+            {t.rich('Support.benefitHosting', {
+              link: (txt) => (
+                <Link href="/blog/spliit-by-the-stats-usage-costs-donations">
+                  {txt}
+                </Link>
+              ),
+            })}
           </li>
           <li>
-            You help us keep the application{' '}
-            <strong>free and without ads</strong>.
+            {t.rich('Support.benefitAds', {
+              strong: (txt) => <strong>{txt}</strong>,
+            })}
           </li>
           <li>
-            You give me energy to build <strong>new features</strong> and
-            improve the application.
+            {t.rich('Support.benefitFeatures', {
+              strong: (txt) => <strong>{txt}</strong>,
+            })}
           </li>
         </ul>
+        <p>{t('Support.transparency')}</p>
       </div>
       <div className="flex justify-center gap-2">
         <Button
           asChild
           className="bg-pink-700 hover:bg-pink-600 dark:bg-pink-500 dark:hover:bg-pink-600"
         >
-          <a href="https://github.com/sponsors/scastiel" target="_blank">
-            <Heart className="w-4 h-4 mr-2" /> Sponsor us (on GitHub)
+          <a href={openCollective.contribute} target="_blank" rel="noopener">
+            <Heart className="w-4 h-4 mr-2" /> {t('Support.contribute')}
           </a>
         </Button>
         <Button asChild variant="secondary">
-          <a href={donationUrl} target="_blank">
-            <Wallet className="w-4 h-4 mr-2" /> Donate (via Stripe)
+          <a href={openCollective.donate} target="_blank" rel="noopener">
+            <Wallet className="w-4 h-4 mr-2" /> {t('Support.donate')}
           </a>
         </Button>
       </div>
