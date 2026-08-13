@@ -32,6 +32,7 @@ const nextConfig = {
   images: {
     remotePatterns,
   },
+  reactCompiler: true,
   // Required to run in a codespace (see https://github.com/vercel/next.js/issues/58019)
   experimental: {
     serverActions: {
