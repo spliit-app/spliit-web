@@ -21,11 +21,13 @@ import {
 } from '@/components/ui/popover'
 import { useAnalytics } from '@/lib/analytics/context'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
+import { openCollective } from '@/lib/opencollective'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
   BarChart,
   ExternalLink,
   Globe,
+  HeartHandshake,
   Linkedin,
   LucideIcon,
   Newspaper,
@@ -49,6 +51,53 @@ type News = {
 }
 
 const news: News[] = [
+  {
+    id: 'open-collective',
+    title: <>Spliit’s funding is now on Open Collective</>,
+    summary: (
+      <>
+        Donations now go through Open Collective, where anyone can see what
+        comes in and what goes out.
+      </>
+    ),
+    icon: HeartHandshake,
+    content: (
+      <>
+        <p>
+          Spliit used to be funded through GitHub Sponsors and a Stripe donation
+          link, which meant the money went through my personal account. It now
+          goes through Open Collective instead.
+        </p>
+        <p>
+          Everything is public there: every donation, every expense, and the
+          current balance. The money covers the hosting costs — around $150 a
+          month — and is never used to pay me or the contributors.
+        </p>
+        <p className="flex items-center gap-2">
+          <Button asChild>
+            <a
+              target="_blank"
+              href="/blog/spliit-funding-is-now-on-open-collective"
+              className="no-underline"
+            >
+              <ExternalLink className="mr-2 w-4" />
+              Read the blog post
+            </a>
+          </Button>
+          <Button variant="secondary" asChild>
+            <a
+              target="_blank"
+              href={openCollective.url}
+              className="no-underline"
+            >
+              <HeartHandshake className="mr-2 w-4" />
+              Open Collective
+            </a>
+          </Button>
+        </p>
+      </>
+    ),
+  },
   {
     id: 'mobile-app',
     title: <>The iOS app is here!</>,

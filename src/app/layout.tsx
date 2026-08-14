@@ -178,16 +178,6 @@ function Content({ children }: { children: React.ReactNode }) {
                     </Link>
                   </Button>
                 </li>
-                <li>
-                  <Button variant="link" size="sm" asChild>
-                    <Link
-                      target="_blank"
-                      href="https://www.indiehackers.com/product/spliit"
-                    >
-                      IndieHackers
-                    </Link>
-                  </Button>
-                </li>
               </ul>
             </span>
             <span>
