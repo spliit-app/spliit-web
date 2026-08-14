@@ -130,7 +130,19 @@ Always pass `--ignore-scripts` to npm in CI: this repo's `postinstall` runs
 
 A corrupted lockfile has broken `main` before (`fix: repair corrupted
 package-lock.json breaking CI on main`, #556), so verify `npm ci
---ignore-scripts` succeeds afterwards.
+--ignore-scripts` succeeds afterwards. That verification is not optional
+ceremony — it is the only step that catches a lockfile out of sync with
+`package.json`, and it is exactly what CI runs.
+
+**Regenerate on the same npm major that CI uses.** npm 10 prunes
+`optionalDependencies` for every platform except the one it is running on;
+npm 11 keeps them all and rejects a pruned lockfile with
+`EUSAGE ... can only install packages when your package.json and
+package-lock.json are in sync`, listing `@img/sharp-*` and `@parcel/watcher-*`
+as missing. A lockfile regenerated under the wrong major passes `npm ci`
+locally and fails it in CI. The sync workflow now takes its Node version from
+`.github/workflows/ci.yml` for exactly this reason; if you regenerate by hand,
+match that version too.
 
 ### `messages/*.json`
 
