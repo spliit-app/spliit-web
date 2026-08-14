@@ -1,0 +1,274 @@
+name: Sync base release
+
+# Watches spliit-app/spliit for new releases and opens a PR on this fork
+# containing a merge commit for the new tag. Conflicts are resolved by Claude
+# Code before the PR is opened.
+#
+# Setup and required secrets: .github/sync-base/README.md
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Base tag to merge (defaults to the latest base release)'
+        required: false
+        type: string
+
+concurrency:
+  group: sync-base
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  BASE_REPO: spliit-app/spliit
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Resolve base tag to merge
+        id: tag
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -n "${INPUT_TAG}" ]; then
+            TAG="${INPUT_TAG}"
+          else
+            TAG="$(gh api "repos/${BASE_REPO}/releases/latest" --jq .tag_name)"
+          fi
+          echo "Base release to merge: ${TAG}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "branch=sync-base-${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Decide whether there is anything to do
+        id: check
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
+        run: |
+          set -euo pipefail
+          git remote add base "https://github.com/${BASE_REPO}.git"
+          # --no-tags keeps base tags out of this repo on purpose: pushing a tag
+          # here would trigger cd.yml and publish a Docker image.
+          git fetch --no-tags base "refs/tags/${TAG}"
+          BASE_SHA="$(git rev-parse FETCH_HEAD)"
+          echo "base_sha=${BASE_SHA}" >> "$GITHUB_OUTPUT"
+
+          if git merge-base --is-ancestor "${BASE_SHA}" HEAD; then
+            echo "::notice::${TAG} is already merged into main - nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if git ls-remote --exit-code --heads origin "${BRANCH}" >/dev/null 2>&1; then
+            echo "::notice::Branch ${BRANCH} already exists on origin - nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        if: steps.check.outputs.skip == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.check.outputs.skip == 'false'
+        env:
+          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # --ignore-scripts skips postinstall, which runs `prisma migrate deploy`
+          # and needs a live database.
+          npm ci --ignore-scripts
+          npx prisma generate
+          npx basehub
+          # basehub-types.d.ts is tracked but generated; keep it out of the merge commit.
+          git checkout -- basehub-types.d.ts
+
+      - name: Merge base tag
+        id: merge
+        if: steps.check.outputs.skip == 'false'
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
+          BASE_SHA: ${{ steps.check.outputs.base_sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "${BRANCH}"
+
+          if git merge --no-ff --no-commit "${BASE_SHA}"; then
+            echo "::notice::Merged ${TAG} with no conflicts."
+            echo "conflicts=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "conflicts=true" >> "$GITHUB_OUTPUT"
+            {
+              echo 'files<<SYNC_EOF'
+              git diff --name-only --diff-filter=U
+              echo 'SYNC_EOF'
+            } >> "$GITHUB_OUTPUT"
+            echo "::warning::Merge of ${TAG} has conflicts - handing off to Claude Code."
+            git diff --name-only --diff-filter=U
+          fi
+
+      - name: Resolve conflicts with Claude Code
+        if: steps.check.outputs.skip == 'false' && steps.merge.outputs.conflicts == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --model claude-opus-5
+            --max-turns 80
+            --allowedTools Read,Edit,Write,Glob,Grep,Bash
+          prompt: |
+            You are resolving merge conflicts in spliit-app/spliit-web, a fork of the
+            open-source spliit-app/spliit. A merge of upstream release ${{ steps.tag.outputs.tag }}
+            is in progress in the current working directory (MERGE_HEAD exists).
+
+            Conflicted files:
+            ${{ steps.merge.outputs.files }}
+
+            Read .github/sync-base/CONFLICT_RESOLUTION.md first. It describes how this
+            fork diverges from the base and which side to prefer for each area. Follow it.
+
+            Your job:
+            1. Resolve every conflict so that BOTH the upstream change and the fork's
+               customisations survive. Never resolve by wholesale discarding one side.
+               `git log`, `git show`, and `git diff` are available if you need to see
+               what each side was trying to do.
+            2. `git add` each file as you finish it. Leave no conflict markers behind.
+            3. If package.json or package-lock.json conflicted, do not hand-merge the
+               lockfile: resolve package.json, then run `npm install --package-lock-only`
+               to regenerate package-lock.json, then `npm install --ignore-scripts` so
+               node_modules matches. Always pass --ignore-scripts to npm: this repo's
+               postinstall runs `prisma migrate deploy`, which needs a live database.
+            4. Verify: `npm run check-types`, `npm run lint`, and `npm run check-formatting`
+               (use `npm run prettier` to fix formatting). Fix what you reasonably can.
+               If a failure needs a product decision, leave it and say so in your summary.
+            5. `git checkout -- basehub-types.d.ts` if you accidentally regenerate it and
+               it was not part of this merge.
+
+            Hard constraints:
+            - Do NOT run `git commit`, `git merge --abort`, `git reset`, `git push`, or
+              any `gh pr` command. The workflow commits and opens the PR after you finish.
+            - Do NOT change files that are not part of this merge.
+
+            Finish with a short summary: one line per conflicted file explaining how you
+            resolved it, then the status of each verification command.
+
+      - name: Verify the merge is complete
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          set -euo pipefail
+          if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
+            echo "::error::Conflicts are still unresolved:"
+            git diff --name-only --diff-filter=U
+            exit 1
+          fi
+          if git grep -n --no-color -E '^(<{7}|>{7}) ' -- . ; then
+            echo "::error::Conflict markers left in the tree (see above)."
+            exit 1
+          fi
+          test -f .git/MERGE_HEAD || {
+            echo "::error::MERGE_HEAD is gone - the merge was aborted or committed early."
+            exit 1
+          }
+
+      - name: Create the merge commit
+        if: steps.check.outputs.skip == 'false'
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          git add -A
+          git commit --no-verify -m "Merge base ${TAG}"
+          # Two parents expected: fork main, then the base tag.
+          git log --format='%h parents=%p %s' -1
+
+      - name: Run checks
+        id: checks
+        if: steps.check.outputs.skip == 'false'
+        continue-on-error: true
+        env:
+          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          status=0
+          npm ci --ignore-scripts || status=1
+          npx prisma generate || status=1
+          npx basehub || status=1
+          npm run check-types || status=1
+          npm run lint || status=1
+          npm run check-formatting || status=1
+          if [ "$status" -eq 0 ]; then
+            echo "result=passing" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=failing" >> "$GITHUB_OUTPUT"
+          fi
+          exit "$status"
+
+      - name: Push branch and open pull request
+        if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
+          CONFLICTS: ${{ steps.merge.outputs.conflicts }}
+          CHECKS: ${{ steps.checks.outputs.result }}
+          FILES: ${{ steps.merge.outputs.files }}
+        run: |
+          set -euo pipefail
+          git push origin "${BRANCH}"
+
+          if [ "${CONFLICTS}" = 'true' ]; then
+            CONFLICT_LINE="⚠️ **Conflicts were resolved by Claude Code** — review the merge commit carefully."
+            CONFLICT_DETAIL="$(printf '%s\n' "${FILES}" | sed "s/^/- \`/; s/\$/\`/")"
+          else
+            CONFLICT_LINE="✅ Merged cleanly, no conflicts."
+            CONFLICT_DETAIL="_none_"
+          fi
+
+          if [ "${CHECKS}" = 'passing' ]; then
+            CHECK_LINE="✅ \`check-types\`, \`lint\` and \`check-formatting\` pass."
+          else
+            CHECK_LINE="❌ Post-merge checks **failed** — see the \`Run checks\` step in the workflow run."
+          fi
+
+          # printf rather than a heredoc: a heredoc body must start at column 0,
+          # which would terminate this YAML block scalar.
+          {
+            printf '%s\n\n' "Merges [\`${TAG}\`](https://github.com/${BASE_REPO}/releases/tag/${TAG}) from \`${BASE_REPO}\` into this fork."
+            printf '%s\n' "${CONFLICT_LINE}"
+            printf '%s\n\n' "${CHECK_LINE}"
+            printf '%s\n\n' "### Conflicted files"
+            printf '%s\n\n' "${CONFLICT_DETAIL}"
+            cat .github/sync-base/pr-checklist.md
+            printf '\n%s\n' "---"
+            printf '%s\n' "Opened by \`sync-base-release.yml\` · [workflow run](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})"
+          } > "${RUNNER_TEMP}/pr-body.md"
+
+          gh pr create \
+            --base main \
+            --head "${BRANCH}" \
+            --title "Merge base ${TAG}" \
+            --body-file "${RUNNER_TEMP}/pr-body.md"
