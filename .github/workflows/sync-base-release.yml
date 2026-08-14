@@ -15,6 +15,11 @@ on:
         description: 'Base tag to merge (defaults to the latest base release)'
         required: false
         type: string
+      skip_checks:
+        description: 'Merge even if upstream CI is not green (for backfilling old tags)'
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: sync-base
@@ -64,7 +69,8 @@ jobs:
           # --no-tags keeps base tags out of this repo on purpose: pushing a tag
           # here would trigger cd.yml and publish a Docker image.
           git fetch --no-tags base "refs/tags/${TAG}"
-          BASE_SHA="$(git rev-parse FETCH_HEAD)"
+          # ^{commit} peels an annotated tag to the commit the check runs hang off.
+          BASE_SHA="$(git rev-parse "FETCH_HEAD^{commit}")"
           echo "base_sha=${BASE_SHA}" >> "$GITHUB_OUTPUT"
 
           if git merge-base --is-ancestor "${BASE_SHA}" HEAD; then
@@ -81,15 +87,77 @@ jobs:
 
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
-      - name: Set up Node.js
+      # Every step below keys off gate.outputs.proceed rather than check.outputs.skip:
+      # when this step does not run, the output is empty, so one condition covers
+      # both "already synced" and "upstream is not green".
+      - name: Require green checks on the base release
+        id: gate
         if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          BASE_SHA: ${{ steps.check.outputs.base_sha }}
+          SKIP_CHECKS: ${{ inputs.skip_checks }}
+          # Must exist on the tagged commit and have concluded `success`.
+          # `checks` comes from upstream ci.yml, `e2e` from upstream e2e.yml
+          # (which triggers on `push: tags`, so it is a genuine release gate).
+          # Comma-separated, so names containing a comma cannot be listed here.
+          REQUIRED_CHECKS: 'checks,e2e'
+          # e2e.yml allows itself 40 minutes; wait a little longer than that.
+          CHECKS_TIMEOUT_SECONDS: '2700'
+          CHECKS_POLL_SECONDS: '60'
+        run: |
+          set -uo pipefail
+          if [ "${SKIP_CHECKS}" = 'true' ]; then
+            echo "::warning::skip_checks was set - merging ${TAG} without verifying upstream CI."
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            echo "verified=bypassed" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # tee rather than command substitution: the script can poll for up to
+          # CHECKS_TIMEOUT_SECONDS, and its progress should stream into the log
+          # rather than appear all at once when it finishes.
+          bash .github/sync-base/require-green-checks.sh "${BASE_REPO}" "${BASE_SHA}" 2>&1 \
+            | tee "${RUNNER_TEMP}/gate.log"
+          rc="${PIPESTATUS[0]}"
+          out="$(cat "${RUNNER_TEMP}/gate.log")"
+          {
+            echo "## Base release ${TAG}"
+            echo
+            echo '```'
+            echo "${out}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          case "${rc}" in
+            0)
+              echo "proceed=true" >> "$GITHUB_OUTPUT"
+              echo "verified=green" >> "$GITHUB_OUTPUT"
+              ;;
+            2)
+              echo "::warning::${TAG} has failing checks upstream - not opening a sync PR."
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              ;;
+            3)
+              echo "::notice::${TAG} checks have not finished - will retry on the next run."
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "::error::require-green-checks.sh exited ${rc}"
+              exit 1
+              ;;
+          esac
+
+      - name: Set up Node.js
+        if: steps.gate.outputs.proceed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
 
       - name: Install dependencies
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         env:
           BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
         run: |
@@ -104,7 +172,7 @@ jobs:
 
       - name: Merge base tag
         id: merge
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         env:
           TAG: ${{ steps.tag.outputs.tag }}
           BRANCH: ${{ steps.tag.outputs.branch }}
@@ -130,7 +198,7 @@ jobs:
           fi
 
       - name: Resolve conflicts with Claude Code
-        if: steps.check.outputs.skip == 'false' && steps.merge.outputs.conflicts == 'true'
+        if: steps.gate.outputs.proceed == 'true' && steps.merge.outputs.conflicts == 'true'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -177,7 +245,7 @@ jobs:
             resolved it, then the status of each verification command.
 
       - name: Verify the merge is complete
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         run: |
           set -euo pipefail
           if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
@@ -195,7 +263,7 @@ jobs:
           }
 
       - name: Create the merge commit
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         env:
           TAG: ${{ steps.tag.outputs.tag }}
         run: |
@@ -207,7 +275,7 @@ jobs:
 
       - name: Run checks
         id: checks
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         continue-on-error: true
         env:
           BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
@@ -228,7 +296,7 @@ jobs:
           exit "$status"
 
       - name: Push branch and open pull request
-        if: steps.check.outputs.skip == 'false'
+        if: steps.gate.outputs.proceed == 'true'
         env:
           GH_TOKEN: ${{ secrets.SYNC_PAT || secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.tag.outputs.tag }}
@@ -236,9 +304,17 @@ jobs:
           CONFLICTS: ${{ steps.merge.outputs.conflicts }}
           CHECKS: ${{ steps.checks.outputs.result }}
           FILES: ${{ steps.merge.outputs.files }}
+          VERIFIED: ${{ steps.gate.outputs.verified }}
+          REQUIRED_CHECKS: 'checks,e2e'
         run: |
           set -euo pipefail
           git push origin "${BRANCH}"
+
+          if [ "${VERIFIED}" = 'green' ]; then
+            UPSTREAM_LINE="✅ Upstream CI green on the tagged commit (required: \`${REQUIRED_CHECKS}\`)."
+          else
+            UPSTREAM_LINE="⚠️ Upstream CI was **not** verified — this run was dispatched with \`skip_checks\`."
+          fi
 
           if [ "${CONFLICTS}" = 'true' ]; then
             CONFLICT_LINE="⚠️ **Conflicts were resolved by Claude Code** — review the merge commit carefully."
@@ -258,6 +334,7 @@ jobs:
           # which would terminate this YAML block scalar.
           {
             printf '%s\n\n' "Merges [\`${TAG}\`](https://github.com/${BASE_REPO}/releases/tag/${TAG}) from \`${BASE_REPO}\` into this fork."
+            printf '%s\n' "${UPSTREAM_LINE}"
             printf '%s\n' "${CONFLICT_LINE}"
             printf '%s\n\n' "${CHECK_LINE}"
             printf '%s\n\n' "### Conflicted files"

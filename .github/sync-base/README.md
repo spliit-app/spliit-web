@@ -2,9 +2,9 @@
 
 `.github/workflows/sync-base-release.yml` keeps this fork in step with
 `spliit-app/spliit`. Once a day it checks upstream's latest GitHub release; if
-that tag is not already an ancestor of `main`, it creates `sync-base-<tag>`,
-merges the tag with `--no-ff`, has Claude Code resolve any conflicts, runs the
-CI checks, and opens a PR.
+that tag is not already an ancestor of `main` **and upstream CI is green for
+it**, it creates `sync-base-<tag>`, merges the tag with `--no-ff`, has Claude
+Code resolve any conflicts, runs the CI checks, and opens a PR.
 
 The PR branch contains a real merge commit (`Merge base <tag>`, two parents:
 fork `main` and the upstream tag), so once it lands the tag is part of this
@@ -61,6 +61,64 @@ Actions to create and approve pull requests**. Needed only for the
 
 The job is a no-op when the tag is already merged or `sync-base-<tag>` already
 exists on the remote, so re-running is safe.
+
+## The green-checks gate
+
+A release only produces a PR if upstream CI passed on the tagged commit.
+[`require-green-checks.sh`](require-green-checks.sh) enforces it and can be run
+by hand:
+
+```sh
+.github/sync-base/require-green-checks.sh spliit-app/spliit <commit-sha>
+# exit 0 green · 2 red · 3 still pending
+```
+
+The rules:
+
+- Every check run listed for `REQUIRED_CHECKS` (default `checks,e2e`) must
+  exist, be completed, and have concluded `success`. `skipped` does not count
+  for a check we explicitly demanded.
+- No other check run may have failed. `success`, `skipped` and `neutral` are
+  all fine; anything else is red.
+- If checks are still running — or a required one has not been reported yet —
+  the script waits (`CHECKS_TIMEOUT_SECONDS`, default 2700s, polled every 60s)
+  and then gives up. A pending release is not an error: the job stays green and
+  the next daily run picks it up.
+
+A red release logs a `::warning::` and opens no PR. Either way the check-run
+table is written to the workflow run's summary.
+
+### Why the tagged commit has the checks you want
+
+Upstream's `e2e.yml` triggers on `push: tags: ['*']`, the same trigger as
+`cd.yml` — so `e2e` is a genuine per-release gate and its check run attaches to
+the tag's commit. Release tags also sit on `main`, so `ci.yml`'s `checks` run
+is on the same commit. That is why a single commit SHA is enough to judge a
+release.
+
+> **Use the check-runs API, not `/status`.** These are GitHub Actions check
+> runs; the legacy combined-status endpoint reports `state: "pending"` with
+> zero statuses for the very same commit. A gate written against `/status`
+> would block every release forever.
+
+### Tuning and bypassing
+
+`REQUIRED_CHECKS` and `CHECKS_TIMEOUT_SECONDS` are set in the workflow's
+`Require green checks on the base release` step. `REQUIRED_CHECKS` is
+comma-separated, so a check whose name contains a comma — such as
+`build (linux/amd64, ubuntu-latest)` — cannot be listed. Those still count
+under the "nothing else may fail" rule.
+
+To merge a tag without the gate:
+
+```sh
+gh workflow run sync-base-release.yml -R spliit-app/spliit-web \
+  -f tag=1.15.0 -f skip_checks=true
+```
+
+Needed for backfilling old releases: tags from before the workflows existed
+have no check runs at all, so the gate correctly reports them as pending
+forever. The resulting PR is labelled as unverified in its body.
 
 ## What Claude Code is asked to do
 
