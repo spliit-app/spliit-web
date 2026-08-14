@@ -28,5 +28,11 @@ type CustomAnalyticsEvent =
   // The news ID identifies a piece of content rather than a user, and there are
   // only ever a handful of them, so it stays low-cardinality.
   | { event: 'news: click news'; props: { news: string } }
+  // Which of the contribution paths offered on the home page was taken. A fixed
+  // handful of values, none of them tied to a visitor.
+  | {
+      event: 'contribute: click'
+      props: { route: 'code' | 'translate' | 'fund' | 'share' }
+    }
 
 export type AnalyticsEvent = BaseAnalyticsEvent | CustomAnalyticsEvent

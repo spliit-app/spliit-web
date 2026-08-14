@@ -1,4 +1,6 @@
+import { ContributeRoutes } from '@/app/contribute-routes'
 import { Contributors } from '@/app/contributors'
+import { GitHubStarPill, RepoStatsLine } from '@/app/github-stats'
 import { StatsDisplay } from '@/app/stats-display'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
 import {
@@ -10,6 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
+import { github } from '@/lib/github'
 import {
   BarChartHorizontalBig,
   Calendar,
@@ -43,8 +46,16 @@ export default function HomePage() {
             })}
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            No ads. No account. <br className="sm:hidden" /> Open Source.
-            Forever Free.
+            No ads. No account. <br className="sm:hidden" />{' '}
+            {/* The most prominent mention of open source on the site, and until
+                now the only one that led nowhere. */}
+            <a
+              href="#contribute"
+              className="underline decoration-dotted underline-offset-4 hover:text-foreground transition-colors"
+            >
+              Open Source
+            </a>
+            . Forever Free.
           </p>
           <div className="flex gap-2">
             <Button asChild size="lg">
@@ -54,6 +65,9 @@ export default function HomePage() {
               <Link href="/blog">Read our blog</Link>
             </Button>
           </div>
+          <Suspense fallback={null}>
+            <GitHubStarPill />
+          </Suspense>
           <p className="mt-12 max-w-[42rem] leading-normal text-muted-foreground text-xl sm:text-2xl sm:leading-8">
             <StatsDisplay />
           </p>
@@ -129,7 +143,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 lg:py-32">
+      {/* Linked to from the hero, and the anchor sits below the fixed header. */}
+      <section id="contribute" className="scroll-mt-20 py-16 md:py-24 lg:py-32">
         <div className="container flex max-w-screen-md flex-col items-center text-center">
           <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
             Proudly Open Source
@@ -138,30 +153,23 @@ export default function HomePage() {
             className="mt-2 leading-normal text-muted-foreground sm:text-lg sm:leading-7"
             style={{ textWrap: 'balance' } as any}
           >
-            Spliit is open source and lives thanks to amazing{' '}
-            <a
-              className="underline"
-              target="_blank"
-              href="https://github.com/spliit-app/spliit/graphs/contributors"
-            >
-              contributors
-            </a>
-            !
+            Spliit is built in the open by the people who use it — and there is
+            a way in for you too, whether or not you write code.
           </p>
           <div className="mt-6">
             <Suspense fallback={<div>Loading...</div>}>
               <Contributors />
             </Suspense>
+            <Suspense fallback={null}>
+              <RepoStatsLine />
+            </Suspense>
           </div>
-          <div className="mt-4 md:mt-6">
+          <ContributeRoutes />
+          <div className="mt-6">
             <Button asChild variant="secondary" size="lg">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://github.com/spliit-app/spliit"
-              >
+              <a target="_blank" rel="noreferrer" href={github.url}>
                 <Github className="w-4 h-4 mr-2" />
-                GitHub
+                Browse the code
               </a>
             </Button>
           </div>
@@ -255,36 +263,13 @@ export default function HomePage() {
                 id="contribute"
                 question={<>I use Spliit and like it. How can I contribute?</>}
               >
-                <p>You can contribute to Spliit by several ways.</p>
-                <ul>
-                  <li>
-                    You can share it with your community on social media to let
-                    them know about us,
-                  </li>
-                  <li>
-                    You can{' '}
-                    <FeedbackModal defaultTab="support">
-                      <Button
-                        variant="link"
-                        className="text-base text-pink-600 -mx-4 -my-4"
-                      >
-                        support our hosting costs
-                      </Button>
-                    </FeedbackModal>{' '}
-                    by contributing on Open Collective,
-                  </li>
-                  <li>
-                    If you’re a developer, you can implement new features or
-                    improve the user experience! Go to{' '}
-                    <a
-                      target="_blank"
-                      href="https://github.com/spliit-app/spliit"
-                    >
-                      our GitHub repository
-                    </a>{' '}
-                    to know more about the project.
-                  </li>
-                </ul>
+                <p>
+                  In several ways, and most of them need no code at all: you can
+                  translate the application into your language, help pay for the
+                  servers, tell people about Spliit, or implement a feature
+                  yourself. See <a href="#contribute">Proudly Open Source</a>{' '}
+                  above for where each of those starts.
+                </p>
               </Answer>
             </Accordion>
           </div>
