@@ -40,9 +40,9 @@ const contributeRoutes: ContributeRoute[] = [
     Icon: Code2,
     name: 'Write code',
     description:
-      'Spliit is a Next.js application, written in TypeScript and styled with Tailwind. Some issues are marked as a good place to start.',
-    action: 'Find a first issue',
-    href: github.goodFirstIssues,
+      'Spliit is a Next.js application, written in TypeScript and styled with Tailwind. Pick up an open issue, or bring an idea of your own.',
+    action: 'Browse open issues',
+    href: github.issues,
   },
   {
     id: 'translate',

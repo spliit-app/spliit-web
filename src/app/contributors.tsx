@@ -51,7 +51,7 @@ export async function Contributors() {
         {/* Closes the row with an empty slot: a list of people who already
             contributed reads as a credit roll, this makes it an invitation. */}
         <CircleTile
-          href={github.goodFirstIssues}
+          href={github.issues}
           title="Your avatar could be here"
           className="border-2 border-dashed border-muted-foreground/40 text-muted-foreground hover:border-primary hover:text-primary"
         >

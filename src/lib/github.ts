@@ -12,12 +12,6 @@ const REPO_API_URL = 'https://api.github.com/repos/spliit-app/spliit'
 export const github = {
   url: REPO_URL,
   issues: `${REPO_URL}/issues`,
-  // Deep-linked to the label rather than to the issue list: someone looking for
-  // a first contribution lands on hundreds of unsorted issues otherwise, and
-  // leaves.
-  goodFirstIssues: `${REPO_URL}/issues?q=${encodeURIComponent(
-    'is:issue is:open label:"good first issue"',
-  )}`,
   contributors: `${REPO_URL}/graphs/contributors`,
 } as const
 
