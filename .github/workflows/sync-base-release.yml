@@ -149,27 +149,6 @@ jobs:
               ;;
           esac
 
-      - name: Set up Node.js
-        if: steps.gate.outputs.proceed == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install dependencies
-        if: steps.gate.outputs.proceed == 'true'
-        env:
-          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          # --ignore-scripts skips postinstall, which runs `prisma migrate deploy`
-          # and needs a live database.
-          npm ci --ignore-scripts
-          npx prisma generate
-          npx basehub
-          # basehub-types.d.ts is tracked but generated; keep it out of the merge commit.
-          git checkout -- basehub-types.d.ts
-
       - name: Merge base tag
         id: merge
         if: steps.gate.outputs.proceed == 'true'
@@ -196,6 +175,54 @@ jobs:
             echo "::warning::Merge of ${TAG} has conflicts - handing off to Claude Code."
             git diff --name-only --diff-filter=U
           fi
+
+      # Node is set up *after* the merge, from the merged ci.yml, so this job
+      # always resolves and verifies on the same version the PR's CI will use --
+      # including when a base release bumps it. Getting this wrong is not a
+      # cosmetic mismatch: npm 10 and npm 11 disagree about which optional
+      # platform binaries belong in package-lock.json, so regenerating the
+      # lockfile under the wrong major produces a lockfile that passes
+      # `npm ci` here and fails it in CI.
+      - name: Determine the Node version CI uses
+        id: node
+        if: steps.gate.outputs.proceed == 'true'
+        run: |
+          set -euo pipefail
+          version="$(sed -nE "s/^[[:space:]]*node-version:[[:space:]]*['\"]?([^'\"[:space:]]+)['\"]?.*/\1/p" \
+            .github/workflows/ci.yml | head -1)"
+          if [ -z "${version}" ]; then
+            echo "::error::Could not read node-version from .github/workflows/ci.yml."
+            echo "::error::Fix the parser here rather than letting this job guess."
+            exit 1
+          fi
+          echo "CI uses Node ${version}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        if: steps.gate.outputs.proceed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+          cache: 'npm'
+
+      # Only for the conflict path, and only best-effort: if package.json or the
+      # lockfile is among the conflicts these cannot succeed yet, and Claude
+      # reinstalls once it has resolved them. The authoritative install is the
+      # clean `npm ci` in "Run checks" after the merge is committed.
+      - name: Pre-install dependencies for the conflict resolver
+        if: steps.gate.outputs.proceed == 'true' && steps.merge.outputs.conflicts == 'true'
+        continue-on-error: true
+        env:
+          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          # --ignore-scripts skips postinstall, which runs `prisma migrate deploy`
+          # and needs a live database.
+          npm ci --ignore-scripts || true
+          npx prisma generate || true
+          npx basehub || true
+          # basehub-types.d.ts is tracked but generated; keep it out of the merge.
+          git checkout -- basehub-types.d.ts || true
 
       - name: Resolve conflicts with Claude Code
         if: steps.gate.outputs.proceed == 'true' && steps.merge.outputs.conflicts == 'true'
@@ -227,12 +254,17 @@ jobs:
             2. `git add` each file as you finish it. Leave no conflict markers behind.
             3. If package.json or package-lock.json conflicted, do not hand-merge the
                lockfile: resolve package.json, then run `npm install --package-lock-only`
-               to regenerate package-lock.json, then `npm install --ignore-scripts` so
-               node_modules matches. Always pass --ignore-scripts to npm: this repo's
-               postinstall runs `prisma migrate deploy`, which needs a live database.
+               to regenerate package-lock.json. Then prove it is right by running
+               `npm ci --ignore-scripts`, which is exactly what CI runs and the only
+               thing that catches a lockfile that is out of sync with package.json.
+               Always pass --ignore-scripts to npm: this repo's postinstall runs
+               `prisma migrate deploy`, which needs a live database.
             4. Verify: `npm run check-types`, `npm run lint`, and `npm run check-formatting`
                (use `npm run prettier` to fix formatting). Fix what you reasonably can.
                If a failure needs a product decision, leave it and say so in your summary.
+               Dependencies may be missing or stale when you start — if a command fails
+               because node_modules is wrong, run `npm ci --ignore-scripts` followed by
+               `npx prisma generate` and `npx basehub`, then retry.
             5. `git checkout -- basehub-types.d.ts` if you accidentally regenerate it and
                it was not part of this merge.
 
