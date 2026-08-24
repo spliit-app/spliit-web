@@ -15,6 +15,74 @@
     "builtBy": "Built by <author>Sebastien Castiel</author> and <source>contributors</source>",
     "onOurBlog": "On our blog"
   },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated on August 24, 2026",
+    "metaDescription": "What Spliit stores, what stays on your device, and who else sees it.",
+    "intro": "Spliit is a free and open source application for sharing expenses with friends and family, used from a web browser or from the Spliit app for iOS. This policy describes what the application keeps, what leaves your device, and who else sees it. It applies to the instance serving this page: on <link>spliit.app</link> that instance is operated by Sebastien Castiel, and any other one is covered by “Self-hosting” below.",
+    "noAccount": {
+      "title": "No account, no identity",
+      "body": "Spliit has no accounts. You are never asked for a name, an email address or a password, there is nothing to sign in to, and nothing you do is attached to an identity. We cannot tell who you are, and we do not try to."
+    },
+    "whatIsStored": {
+      "title": "What is stored on the server",
+      "body": "The groups you create are stored on the server: the group’s name, description and currency, the names of its participants, and for every expense its title, amount, date, category, the participant who paid, how it is split, and any notes. This is what the application exists to keep, and it is kept for as long as the group exists.",
+      "documents": "If you attach a receipt or another document to an expense, the image is stored with the file storage this instance is configured to use, and its address is saved with the expense."
+    },
+    "groupLinks": {
+      "title": "Who can see a group",
+      "body": "A group is reachable through its link and through nothing else. There is no directory, no search across groups, and no way to list the groups on the server. Anyone who has the link, though, can read the group and change it — so treat a group link the way you would treat a key, and share it only with the people in the group."
+    },
+    "onYourDevice": {
+      "title": "What stays on your device",
+      "body": "The list of groups you have opened, which of them you have starred or archived, the language and theme you picked, the splitting options you used last, and, in the iOS app, the address of the server you chose. All of it stays in your browser or on your device. Your list of groups is never sent to the server: it has no idea which groups belong together in your list."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "provider": "This instance measures how it is used with Plausible Analytics, which is cookieless, sets no identifier and collects no personal data. It receives the address of the page you are on and a short list of events — a group created, an expense created or deleted, a receipt scanned, and a few more of that kind.",
+      "noIds": "Group and expense identifiers are stripped before anything is sent: a page is reported as <code>/groups/[groupId]/expenses</code> rather than under its real address. That identifier is what gives access to a group, so it never reaches analytics, and no event carries anything you typed.",
+      "noTracking": "There is no advertising, no profiling, and no tracking of you across other websites or applications.",
+      "disabled": "This instance collects no usage statistics at all."
+    },
+    "ai": {
+      "title": "Scanning receipts and suggesting categories",
+      "receipt": "When you create an expense by scanning a receipt, the picture of the receipt is sent to OpenAI, which reads the total, the date and a title from it. This happens only when you use that feature, and only with the picture you chose.",
+      "category": "When the application suggests a category for an expense, the title you typed is sent to OpenAI to make that suggestion. Nothing else about the expense goes with it.",
+      "training": "OpenAI processes those requests on our behalf. Under the terms of their API, what is sent is not used to train their models."
+    },
+    "logs": {
+      "title": "Technical logs",
+      "body": "Like any website, the servers running Spliit keep short-lived technical logs of the requests they receive: the address requested, the time, the browser or app used, and the network address it came from. They serve to keep the service running and to deal with abuse, and nothing else."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "body": "One cookie, which remembers the language you chose. There are no advertising cookies and no tracking cookies."
+    },
+    "deleting": {
+      "title": "Deleting your data",
+      "body": "An expense can be deleted from within its group at any time, and a group can be removed from the list on your device. Deleting a group from the server is not something the application can do yet: write to <contact>hello@spliit.app</contact> with the group’s link and it will be deleted for you."
+    },
+    "children": {
+      "title": "Children",
+      "body": "Spliit is not directed at children, and asks for no personal information from anyone of any age. If you believe a child has entered personal information into a group on this instance, write to <contact>hello@spliit.app</contact> and it will be removed."
+    },
+    "security": {
+      "title": "Security",
+      "body": "Traffic to and from Spliit is encrypted. There are no accounts, so there are no passwords to steal and no credentials to lose. The privacy of a group rests on its link staying among the people who should have it."
+    },
+    "selfHosting": {
+      "title": "Self-hosting",
+      "body": "Spliit is open source, and anyone can run their own instance. If you run one, or point the iOS app at one in its settings, your groups are stored on that server and nothing about them reaches spliit.app. This policy then describes that instance, and whoever runs it answers for it."
+    },
+    "changes": {
+      "title": "Changes to this policy",
+      "body": "This page is updated when what the application does changes. The date at the top says when it was last touched, and its whole history is public in the <repository>source repository</repository>."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For any question about privacy, or to have data deleted, write to <contact>hello@spliit.app</contact>."
+    }
+  },
   "Support": {
     "buttonLabel": "Support us",
     "title": "Support us",

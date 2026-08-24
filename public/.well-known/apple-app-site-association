@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["VKY5EKKU47.app.spliit.spliitmobile"],
+        "components": [
+          {
+            "/": "/groups/*",
+            "comment": "Opens a group in the iOS app"
+          }
+        ]
+      }
+    ]
+  }
+}

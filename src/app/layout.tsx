@@ -188,6 +188,11 @@ function Content({ children }: { children: React.ReactNode }) {
                 </Button>
               </FeedbackModal>
             </span>
+            <span>
+              <Button variant="link" size="sm" asChild className="-ml-3 h-7">
+                <Link href="/privacy-policy">{t('PrivacyPolicy.title')}</Link>
+              </Button>
+            </span>
           </div>
         </div>
         <div>
