@@ -14,6 +14,74 @@
     "madeIn": "Made in Montréal, Québec 🇨🇦",
     "builtBy": "Développé par <author>Sebastien Castiel</author> et <source>contributeurs</source>"
   },
+  "PrivacyPolicy": {
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour le 24 août 2026",
+    "metaDescription": "Ce que Spliit conserve, ce qui reste sur votre appareil, et qui d’autre y a accès.",
+    "intro": "Spliit est une application libre et gratuite pour partager des dépenses entre amis ou en famille, utilisable depuis un navigateur web ou depuis l’application Spliit pour iOS. Cette politique décrit ce que l’application conserve, ce qui quitte votre appareil, et qui d’autre y a accès. Elle s’applique à l’instance qui affiche cette page : sur <link>spliit.app</link>, cette instance est exploitée par Sebastien Castiel ; toute autre relève de la section « Héberger sa propre instance » plus bas.",
+    "noAccount": {
+      "title": "Aucun compte, aucune identité",
+      "body": "Spliit n’a pas de comptes. On ne vous demande jamais de nom, d’adresse e-mail ni de mot de passe, il n’y a rien à quoi se connecter, et rien de ce que vous faites n’est rattaché à une identité. Nous ne savons pas qui vous êtes, et nous ne cherchons pas à le savoir."
+    },
+    "whatIsStored": {
+      "title": "Ce qui est enregistré sur le serveur",
+      "body": "Les groupes que vous créez sont enregistrés sur le serveur : le nom du groupe, sa description et sa devise, les noms de ses participants, et pour chaque dépense son titre, son montant, sa date, sa catégorie, le participant qui a payé, la façon dont elle est partagée et les notes qui l’accompagnent. C’est ce que l’application existe pour conserver, et elles le restent aussi longtemps que le groupe existe.",
+      "documents": "Si vous joignez un reçu ou un autre document à une dépense, l’image est enregistrée sur le stockage de fichiers configuré pour cette instance, et son adresse est conservée avec la dépense."
+    },
+    "groupLinks": {
+      "title": "Qui peut voir un groupe",
+      "body": "Un groupe est accessible par son lien, et par rien d’autre : il n’existe ni annuaire, ni recherche entre les groupes, ni moyen de lister les groupes du serveur. En revanche, quiconque possède le lien peut lire le groupe et le modifier — traitez donc un lien de groupe comme une clé, et ne le partagez qu’avec les personnes du groupe."
+    },
+    "onYourDevice": {
+      "title": "Ce qui reste sur votre appareil",
+      "body": "La liste des groupes que vous avez ouverts, ceux que vous avez mis en favori ou archivés, la langue et le thème que vous avez choisis, les options de partage utilisées la dernière fois, et, dans l’application iOS, l’adresse du serveur que vous avez choisi. Tout cela reste dans votre navigateur ou sur votre appareil. Votre liste de groupes n’est jamais envoyée au serveur : celui-ci ignore quels groupes se trouvent ensemble dans votre liste."
+    },
+    "analytics": {
+      "title": "Mesure d’audience",
+      "provider": "Cette instance mesure son utilisation avec Plausible Analytics, qui n’utilise aucun cookie, ne pose aucun identifiant et ne recueille aucune donnée personnelle. Lui sont envoyés l’adresse de la page consultée et une courte liste d’événements — un groupe créé, une dépense créée ou supprimée, un reçu numérisé, et quelques autres du même ordre.",
+      "noIds": "Les identifiants de groupe et de dépense sont retirés avant tout envoi : une page est rapportée comme <code>/groups/[groupId]/expenses</code> plutôt que sous son adresse réelle. Cet identifiant est ce qui donne accès à un groupe ; il n’atteint donc jamais la mesure d’audience, et aucun événement ne contient ce que vous avez saisi.",
+      "noTracking": "Il n’y a ni publicité, ni profilage, ni suivi de votre activité sur d’autres sites ou applications.",
+      "disabled": "Cette instance ne recueille aucune statistique d’utilisation."
+    },
+    "ai": {
+      "title": "Numérisation des reçus et suggestion de catégories",
+      "receipt": "Lorsque vous créez une dépense en numérisant un reçu, la photo du reçu est envoyée à OpenAI, qui y lit le montant total, la date et un titre. Cela n’arrive que lorsque vous utilisez cette fonction, et uniquement avec la photo que vous avez choisie.",
+      "category": "Lorsque l’application suggère une catégorie pour une dépense, le titre que vous avez saisi est envoyé à OpenAI pour produire cette suggestion. Rien d’autre de la dépense ne l’accompagne.",
+      "training": "OpenAI traite ces requêtes pour notre compte. Selon les conditions de leur API, ce qui leur est envoyé ne sert pas à entraîner leurs modèles."
+    },
+    "logs": {
+      "title": "Journaux techniques",
+      "body": "Comme tout site web, les serveurs qui font fonctionner Spliit conservent de brefs journaux techniques des requêtes qu’ils reçoivent : l’adresse demandée, l’heure, le navigateur ou l’application utilisés, et l’adresse réseau d’où provient la requête. Ils servent à maintenir le service en état de marche et à faire face aux abus, et à rien d’autre."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "body": "Un seul cookie, qui retient la langue que vous avez choisie. Il n’y a ni cookie publicitaire, ni cookie de suivi."
+    },
+    "deleting": {
+      "title": "Supprimer vos données",
+      "body": "Une dépense peut être supprimée depuis son groupe à tout moment, et un groupe peut être retiré de la liste sur votre appareil. Supprimer un groupe du serveur n’est pas encore possible depuis l’application : écrivez à <contact>hello@spliit.app</contact> avec le lien du groupe et il sera supprimé pour vous."
+    },
+    "children": {
+      "title": "Enfants",
+      "body": "Spliit ne s’adresse pas aux enfants, et ne demande aucune information personnelle à qui que ce soit, quel que soit son âge. Si vous pensez qu’un enfant a saisi des informations personnelles dans un groupe de cette instance, écrivez à <contact>hello@spliit.app</contact> et elles seront supprimées."
+    },
+    "security": {
+      "title": "Sécurité",
+      "body": "Les échanges avec Spliit sont chiffrés. Il n’y a pas de comptes, donc pas de mots de passe à dérober ni d’identifiants à perdre. La confidentialité d’un groupe tient à son lien, qui doit rester entre les mains des personnes concernées."
+    },
+    "selfHosting": {
+      "title": "Héberger sa propre instance",
+      "body": "Spliit est un logiciel libre, et chacun peut en héberger sa propre instance. Si vous le faites, ou si vous pointez l’application iOS vers votre serveur dans ses réglages, vos groupes sont enregistrés sur ce serveur et rien les concernant n’atteint spliit.app. Cette politique décrit alors cette instance, et c’est la personne qui l’exploite qui en répond."
+    },
+    "changes": {
+      "title": "Modifications de cette politique",
+      "body": "Cette page est mise à jour lorsque le comportement de l’application change. La date en haut indique la dernière modification, et tout son historique est public dans le <repository>dépôt du code source</repository>."
+    },
+    "contact": {
+      "title": "Nous contacter",
+      "body": "Pour toute question relative à la confidentialité, ou pour faire supprimer des données, écrivez à <contact>hello@spliit.app</contact>."
+    }
+  },
   "Expenses": {
     "title": "Dépenses",
     "description": "Voici les dépenses que vous avez créées pour votre groupe.",

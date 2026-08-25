@@ -57,6 +57,30 @@ const nextConfig = {
       },
     ]
   },
+  async headers() {
+    return [
+      {
+        /**
+         * The Apple App Site Association file has no extension, so the static
+         * handler falls back to `application/octet-stream` and iOS discards it
+         * without a word. Universal Links only work when it arrives as JSON.
+         */
+        source: '/.well-known/apple-app-site-association',
+        headers: [{ key: 'Content-Type', value: 'application/json' }],
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      // `/privacy` is the address the iOS app's documentation hands out; the
+      // page itself has lived at `/privacy-policy` since the first listing.
+      {
+        source: '/privacy',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default withAxiom(withNextIntl(nextConfig))
