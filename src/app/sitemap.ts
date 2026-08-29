@@ -1,24 +1,27 @@
 import { getPosts } from '@/app/blog/[slug]/helpers'
-import { env } from '@/lib/env'
+import { effectiveBaseUrl } from '@/lib/env'
 import { MetadataRoute } from 'next'
+
+// Rendered per request, for the same reason as robots.ts.
+export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPosts()
   return [
     {
-      url: env.NEXT_PUBLIC_BASE_URL,
+      url: effectiveBaseUrl,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
     },
     {
-      url: `${env.NEXT_PUBLIC_BASE_URL}/blog`,
+      url: `${effectiveBaseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
     },
     {
-      url: `${env.NEXT_PUBLIC_BASE_URL}/privacy-policy`,
+      url: `${effectiveBaseUrl}/privacy-policy`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.5,
@@ -26,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts.map(
       (post) =>
         ({
-          url: `${env.NEXT_PUBLIC_BASE_URL}/blog/${post._slug}`,
+          url: `${effectiveBaseUrl}/blog/${post._slug}`,
           lastModified: new Date(post._sys.lastModifiedAt),
           changeFrequency: 'yearly',
           priority: 1,

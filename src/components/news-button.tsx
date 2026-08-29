@@ -22,25 +22,28 @@ import {
 import { useAnalytics } from '@/lib/analytics/context'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { openCollective } from '@/lib/opencollective'
-import { GitHubLogoIcon } from '@radix-ui/react-icons'
+// lucide-react v1 dropped its brand icons, so the social marks come from Radix.
+import {
+  GitHubLogoIcon,
+  LinkedInLogoIcon,
+  TwitterLogoIcon,
+} from '@radix-ui/react-icons'
 import {
   BarChart,
   ExternalLink,
   Globe,
   HeartHandshake,
-  Linkedin,
   LucideIcon,
   Newspaper,
   Receipt,
   Smartphone,
   Sparkles,
   Speaker,
-  Twitter,
   Wand,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, JSX, SetStateAction, useEffect, useState } from 'react'
 
 type News = {
   id: string
@@ -319,7 +322,7 @@ const news: News[] = [
               )}`}
               className="bg-[#1d9bf0] text-white no-underline dark:bg-[#1d9bf0] dark:text-white dark:hover:text-black"
             >
-              <Twitter className="mr-2 w-4" />
+              <TwitterLogoIcon className="mr-2 w-4" />
               Share on Twitter
             </a>
           </Button>
@@ -329,7 +332,7 @@ const news: News[] = [
               href={`https://www.linkedin.com/shareArticle?mini=true&url=https://spliit.app`}
               className="bg-[#0b66c2] text-white no-underline dark:bg-[#0b66c2] dark:text-white dark:hover:text-black"
             >
-              <Linkedin className="mr-2 w-4" />
+              <LinkedInLogoIcon className="mr-2 w-4" />
               Share on LinkedIn
             </a>
           </Button>

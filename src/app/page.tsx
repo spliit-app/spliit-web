@@ -13,6 +13,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { github } from '@/lib/github'
+// lucide-react v1 dropped its brand icons, so the GitHub mark comes from Radix.
+import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
   BarChartHorizontalBig,
   Calendar,
@@ -20,7 +22,6 @@ import {
   Divide,
   FileImage,
   FolderTree,
-  Github,
   LucideIcon,
   ShieldX,
   Users,
@@ -168,7 +169,7 @@ export default function HomePage() {
           <div className="mt-6">
             <Button asChild variant="secondary" size="lg">
               <a target="_blank" rel="noreferrer" href={github.url}>
-                <Github className="w-4 h-4 mr-2" />
+                <GitHubLogoIcon className="w-4 h-4 mr-2" />
                 Browse the code
               </a>
             </Button>
