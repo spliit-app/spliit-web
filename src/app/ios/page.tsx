@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { appStore } from '@/lib/app-store'
 import { github } from '@/lib/github'
+import { openCollective } from '@/lib/opencollective'
 // lucide-react v1 dropped its brand icons, so the GitHub mark comes from Radix.
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
@@ -206,26 +207,71 @@ export default function IosPage() {
               you do not attach it to the expense, it is never uploaded at all.
             </p>
             <p>
-              There are no accounts, so there is no identity to attach anything
-              to. Spliit is open source, and a group can live on a server you
-              run yourself — in which case nothing about it reaches spliit.app.
+              There are no accounts either, so there is no identity to attach
+              any of it to: no profile building up in the background, and
+              nothing that joins your groups to each other or to you.
             </p>
           </div>
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <div className="mt-6">
             <Button asChild variant="secondary" size="lg">
               <Link href="/privacy-policy">Read the privacy policy</Link>
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <a target="_blank" rel="noreferrer" href={github.url}>
-                <GitHubLogoIcon className="w-4 h-4 mr-2" />
-                Browse the code
-              </a>
             </Button>
           </div>
         </div>
       </section>
 
       <section className="py-16 md:py-24 lg:py-32">
+        <div className="container max-w-screen-md flex flex-col items-center text-center">
+          <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-6xl text-balance">
+            Open source, the app included
+          </h2>
+          <div
+            className="mt-4 flex flex-col gap-4 leading-normal text-muted-foreground sm:text-lg sm:leading-7"
+            style={{ textWrap: 'balance' } as any}
+          >
+            <p>
+              Spliit has been open source since its first commit, and the iOS
+              app is no exception. The SwiftUI behind every screen above is a
+              repository you can read, build and run yourself.
+            </p>
+            <p>
+              It talks to spliit.app out of the box, but a group can just as
+              well live on an instance you host — both kinds sit side by side in
+              the same list, and nothing about the ones on your server reaches
+              ours.
+            </p>
+            <p>
+              There is nothing to buy and no advertising. What the public
+              instance costs to run is paid for by donations, on a ledger anyone
+              can read.
+            </p>
+          </div>
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <Button asChild variant="secondary" size="lg">
+              <a target="_blank" rel="noreferrer" href={github.ios}>
+                <GitHubLogoIcon className="w-4 h-4 mr-2" />
+                The app on GitHub
+              </a>
+            </Button>
+            <Button asChild variant="secondary" size="lg">
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href={openCollective.contribute}
+              >
+                Support the project
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/*
+        Slate rather than the default background: the sections alternate down
+        the page, and the open source one above took the slot this used to
+        hold.
+      */}
+      <section className="bg-slate-50 dark:bg-card py-16 md:py-24 lg:py-32">
         <div className="container max-w-screen-md flex flex-col items-center text-center gap-6">
           <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
             Get the app
