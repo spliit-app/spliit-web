@@ -24,11 +24,7 @@ import { appStore } from '@/lib/app-store'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { openCollective } from '@/lib/opencollective'
 // lucide-react v1 dropped its brand icons, so the social marks come from Radix.
-import {
-  GitHubLogoIcon,
-  LinkedInLogoIcon,
-  TwitterLogoIcon,
-} from '@radix-ui/react-icons'
+import { LinkedInLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
 import {
   BarChart,
   ExternalLink,
@@ -132,15 +128,16 @@ const news: News[] = [
               Download on App Store
             </a>
           </Button>
+          {/*
+            Replaces a link to `spliit-app/spliit-mobile`, which is the Expo
+            app this one replaced rather than the app being announced. The
+            iOS page carries the current repository, among other things.
+          */}
           <Button variant="secondary" asChild>
-            <a
-              target="_blank"
-              href="https://github.com/spliit-app/spliit-mobile"
-              className="no-underline"
-            >
-              <GitHubLogoIcon className="mr-2 w-4" />
-              More on GitHub
-            </a>
+            <Link href="/ios" className="no-underline">
+              <Smartphone className="mr-2 w-4" />
+              More information
+            </Link>
           </Button>
         </p>
       </>
