@@ -1,10 +1,9 @@
-import { AppStoreButton } from '@/app/ios/app-store-button'
-import '@/app/ios/device.css'
+import { AppStoreButton } from '@/components/app-store-button'
+import { PhoneMockup } from '@/components/phone-mockup'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { appStore } from '@/lib/app-store'
 import { github } from '@/lib/github'
-import { cn } from '@/lib/utils'
 // lucide-react v1 dropped its brand icons, so the GitHub mark comes from Radix.
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
@@ -20,7 +19,7 @@ import {
   ShieldX,
 } from 'lucide-react'
 import { Metadata } from 'next'
-import Image, { StaticImageData } from 'next/image'
+import { StaticImageData } from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 import groupsShot from '../../../public/ios/01-groups.png'
@@ -79,9 +78,11 @@ export default function IosPage() {
               the last version that runs on them.
             </p>
           </div>
-          <Phone
+          <PhoneMockup
             image={groupsShot}
             alt="The Spliit home screen on iPhone, listing starred, recent and archived groups"
+            sizes="(min-width: 1024px) 15rem, 60vw"
+            className="max-w-[15rem]"
             priority
           />
         </div>
@@ -243,46 +244,6 @@ export default function IosPage() {
   )
 }
 
-/**
- * A screenshot in an iPhone. The captures are the screen and nothing else —
- * no hardware, and a gap left in the status bar where the Dynamic Island
- * belongs — so the frame around them is drawn in CSS. See `device.css` for
- * where its proportions come from.
- */
-function Phone({
-  image,
-  alt,
-  priority = false,
-  className,
-}: {
-  image: StaticImageData
-  alt: string
-  priority?: boolean
-  className?: string
-}) {
-  return (
-    <div className={cn('device-frame mx-auto w-full max-w-[15rem]', className)}>
-      <div className="device">
-        <span aria-hidden className="device-button device-button-action" />
-        <span aria-hidden className="device-button device-button-volume-up" />
-        <span aria-hidden className="device-button device-button-volume-down" />
-        <span aria-hidden className="device-button device-button-power" />
-        <div className="device-casing">
-          <div className="device-screen">
-            <Image
-              src={image}
-              alt={alt}
-              priority={priority}
-              sizes="(min-width: 1024px) 15rem, 60vw"
-            />
-            <span aria-hidden className="device-island" />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function Screen({
   image,
   caption,
@@ -295,7 +256,12 @@ function Screen({
   return (
     <div className="snap-center shrink-0 basis-[70%] sm:basis-[45%] lg:basis-auto lg:shrink flex flex-col items-center gap-4">
       {/* The caption names the screen, so the picture beside it is decorative. */}
-      <Phone image={image} alt="" className="max-w-[13rem]" />
+      <PhoneMockup
+        image={image}
+        alt=""
+        sizes="(min-width: 1024px) 13rem, 60vw"
+        className="max-w-[13rem]"
+      />
       <div className="text-center">
         <strong className="block text-balance">{caption}</strong>
         <p className="mt-1 text-sm text-muted-foreground text-balance">

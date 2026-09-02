@@ -24,12 +24,12 @@ function AppleLogo({ className }: { className?: string }) {
 
 type Props = {
   /**
-   * Which of the two badges on the page was clicked. The hero one is seen by
-   * everybody; the closing one only by people who read to the end, and telling
-   * them apart is the only way to know whether the page below the fold earns
-   * its place.
+   * Which badge was clicked. `home` is the band on the home page, which is
+   * where most people meet the app at all; `hero` and `footer` are the two on
+   * the iOS page, and telling those apart is the only way to know whether the
+   * page below the fold earns its place.
    */
-  placement: 'hero' | 'footer'
+  placement: 'home' | 'hero' | 'footer'
   className?: string
 }
 
