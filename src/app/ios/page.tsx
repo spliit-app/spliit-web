@@ -1,4 +1,5 @@
 import { AppStoreButton } from '@/app/ios/app-store-button'
+import '@/app/ios/device.css'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { appStore } from '@/lib/app-store'
@@ -243,8 +244,10 @@ export default function IosPage() {
 }
 
 /**
- * A screenshot dressed as a phone. The captures are the screen and nothing
- * else, so the rounded corners and the shadow are what make them read as one.
+ * A screenshot in an iPhone. The captures are the screen and nothing else —
+ * no hardware, and a gap left in the status bar where the Dynamic Island
+ * belongs — so the frame around them is drawn in CSS. See `device.css` for
+ * where its proportions come from.
  */
 function Phone({
   image,
@@ -258,18 +261,24 @@ function Phone({
   className?: string
 }) {
   return (
-    <div className={cn('relative mx-auto w-full max-w-[15rem]', className)}>
-      <div
-        aria-hidden
-        className="absolute inset-x-0 -inset-y-8 bg-primary/10 blur-3xl rounded-full"
-      />
-      <Image
-        src={image}
-        alt={alt}
-        priority={priority}
-        sizes="(min-width: 1024px) 15rem, 60vw"
-        className="relative rounded-[2rem] border shadow-xl"
-      />
+    <div className={cn('device-frame mx-auto w-full max-w-[15rem]', className)}>
+      <div className="device">
+        <span aria-hidden className="device-button device-button-action" />
+        <span aria-hidden className="device-button device-button-volume-up" />
+        <span aria-hidden className="device-button device-button-volume-down" />
+        <span aria-hidden className="device-button device-button-power" />
+        <div className="device-casing">
+          <div className="device-screen">
+            <Image
+              src={image}
+              alt={alt}
+              priority={priority}
+              sizes="(min-width: 1024px) 15rem, 60vw"
+            />
+            <span aria-hidden className="device-island" />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
