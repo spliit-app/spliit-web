@@ -2,7 +2,6 @@ import { ContributeRoutes } from '@/app/contribute-routes'
 import { Contributors } from '@/app/contributors'
 import { GitHubStarPill, RepoStatsLine } from '@/app/github-stats'
 import { StatsDisplay } from '@/app/stats-display'
-import { AppStoreButton } from '@/components/app-store-button'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
 import { PhoneMockup } from '@/components/phone-mockup'
 import {
@@ -159,9 +158,13 @@ export default function HomePage() {
 
       {/*
         The home page's only picture of the product, and the app's only route
-        in besides the line in the hero. A contained panel rather than a full
-        band: the sections alternate backgrounds, and another band would break
-        that rhythm wherever it was put.
+        in besides the line in the hero. It leads to `/ios` rather than to the
+        App Store: that page has the tour and the badge, and someone who has
+        read it arrives at the store already knowing what they are getting.
+
+        A contained panel rather than a full band: the sections alternate
+        backgrounds, and another band would break that rhythm wherever it was
+        put.
       */}
       <section className="py-12 md:py-16">
         <div className="container max-w-screen-md">
@@ -178,9 +181,8 @@ export default function HomePage() {
                 iCloud, receipts read by the camera on the phone itself, and the
                 same groups you already use here.
               </p>
-              <AppStoreButton placement="home" />
-              <Button variant="link" asChild className="-mx-4">
-                <Link href="/ios">See what it looks like</Link>
+              <Button asChild size="lg" className="mt-2">
+                <Link href="/ios">See the iOS app</Link>
               </Button>
             </div>
             <PhoneMockup

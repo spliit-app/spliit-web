@@ -34,11 +34,8 @@ type CustomAnalyticsEvent =
       event: 'contribute: click'
       props: { route: 'code' | 'translate' | 'fund' | 'share' }
     }
-  // Which App Store link was taken: the band on the home page, or either of
-  // the two on the iOS page. Three fixed values, none tied to a visitor.
-  | {
-      event: 'ios: download'
-      props: { placement: 'home' | 'hero' | 'footer' }
-    }
+  // Which of the App Store links on the iOS page was taken. Two fixed values,
+  // neither of them tied to a visitor.
+  | { event: 'ios: download'; props: { placement: 'hero' | 'footer' } }
 
 export type AnalyticsEvent = BaseAnalyticsEvent | CustomAnalyticsEvent
