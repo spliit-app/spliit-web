@@ -68,16 +68,6 @@ export default function HomePage() {
               <Link href="/blog">Read our blog</Link>
             </Button>
           </div>
-          {/* The iOS app has had no route into it from the home page since it
-              shipped — only the news popover, which most people never open. */}
-          <p className="text-sm text-muted-foreground">
-            <Link
-              href="/ios"
-              className="underline decoration-dotted underline-offset-4 hover:text-foreground transition-colors"
-            >
-              Also on iPhone
-            </Link>
-          </p>
           <Suspense fallback={null}>
             <GitHubStarPill />
           </Suspense>
@@ -157,10 +147,10 @@ export default function HomePage() {
       </section>
 
       {/*
-        The home page's only picture of the product, and the app's only route
-        in besides the line in the hero. It leads to `/ios` rather than to the
-        App Store: that page has the tour and the badge, and someone who has
-        read it arrives at the store already knowing what they are getting.
+        The home page's only picture of the product, and its only route into
+        the app. It leads to `/ios` rather than to the App Store: that page has
+        the tour and the badge, and someone who has read it arrives at the
+        store already knowing what they are getting.
 
         A contained panel rather than a full band: the sections alternate
         backgrounds, and another band would break that rhythm wherever it was
@@ -182,7 +172,7 @@ export default function HomePage() {
                 same groups you already use here.
               </p>
               <Button asChild size="lg" className="mt-2">
-                <Link href="/ios">See the iOS app</Link>
+                <Link href="/ios">More information</Link>
               </Button>
             </div>
             <PhoneMockup
