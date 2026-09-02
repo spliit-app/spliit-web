@@ -13,6 +13,12 @@ export const github = {
   url: REPO_URL,
   issues: `${REPO_URL}/issues`,
   contributors: `${REPO_URL}/graphs/contributors`,
+  /**
+   * The iOS app, which is a repository of its own rather than a directory of
+   * this one. Only the `/ios` page links to it, and it has no API calls made
+   * against it — the stats below are the web repository's.
+   */
+  ios: 'https://github.com/spliit-app/spliit-ios',
 } as const
 
 /**

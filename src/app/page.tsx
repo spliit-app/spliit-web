@@ -3,6 +3,7 @@ import { Contributors } from '@/app/contributors'
 import { GitHubStarPill, RepoStatsLine } from '@/app/github-stats'
 import { StatsDisplay } from '@/app/stats-display'
 import { FeedbackModal } from '@/components/feedback-button/feedback-button'
+import { PhoneMockup } from '@/components/phone-mockup'
 import {
   Accordion,
   AccordionContent,
@@ -30,6 +31,7 @@ import {
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { ReactNode, Suspense } from 'react'
+import balancesShot from '../../public/ios/04-balances.png'
 
 // FIX for https://github.com/vercel/next.js/issues/58615
 // export const dynamic = 'force-dynamic'
@@ -139,6 +141,45 @@ export default function HomePage() {
               Icon={ShieldX}
               name="No ads"
               description="No account. No limitation. No problem."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/*
+        The home page's only picture of the product, and its only route into
+        the app. It leads to `/ios` rather than to the App Store: that page has
+        the tour and the badge, and someone who has read it arrives at the
+        store already knowing what they are getting.
+
+        A contained panel rather than a full band: the sections alternate
+        backgrounds, and another band would break that rhythm wherever it was
+        put.
+      */}
+      <section className="py-12 md:py-16">
+        <div className="container max-w-screen-md">
+          <div className="bg-card border rounded-lg p-8 sm:p-10 grid sm:grid-cols-[1fr_12rem] items-center gap-8 sm:gap-10">
+            <div className="flex flex-col items-center sm:items-start gap-4 text-center sm:text-left">
+              <h2 className="font-bold text-2xl sm:text-3xl leading-tight text-balance">
+                Spliit for iPhone
+              </h2>
+              <p
+                className="leading-normal text-muted-foreground"
+                style={{ textWrap: 'balance' } as any}
+              >
+                The whole app, rewritten in SwiftUI — your groups kept in
+                iCloud, receipts read by the camera on the phone itself, and the
+                same groups you already use here.
+              </p>
+              <Button asChild size="lg" className="mt-2">
+                <Link href="/ios">More information</Link>
+              </Button>
+            </div>
+            <PhoneMockup
+              image={balancesShot}
+              alt="Balances in the Spliit iPhone app: who is owed what, and the payments that settle the group"
+              sizes="(min-width: 640px) 12rem, 55vw"
+              className="max-w-[12rem]"
             />
           </div>
         </div>

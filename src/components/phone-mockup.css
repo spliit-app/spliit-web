@@ -1,0 +1,157 @@
+/*
+ * An iPhone drawn in CSS around a screenshot.
+ *
+ * Every dimension is a percentage of the frame's own width (`cqw`), so one
+ * set of numbers serves the 15rem phone in the hero and the 13rem ones in
+ * the tour, at any width they are given, without a second set of rules.
+ * `.device-frame` exists only to be the container those units resolve
+ * against: an element cannot size itself from its own container units.
+ *
+ * The proportions are the iPhone 17 Pro Max's, which is the device the
+ * captures came out of — a 440 × 956pt screen, and a 125 × 36pt Dynamic
+ * Island sitting 11pt below the top of it. Screen width is 95.2% of the
+ * frame's, so each of those fractions is scaled by that to land in `cqw`.
+ */
+
+.device-frame {
+  container-type: inline-size;
+  position: relative;
+  /* Kills the descender gap under the screenshot. */
+  line-height: 0;
+}
+
+/*
+ * The bevel: a hairline of brushed metal running light at the top left to
+ * dark at the bottom right, which is what separates a black casing from a
+ * white page.
+ */
+.device {
+  position: relative;
+  padding: 0.4cqw;
+  border-radius: 14cqw;
+  background: linear-gradient(135deg, #5a5a5a 0%, #000 100%);
+  /*
+   * Nine shadows rather than one: each step doubles the blur and roughly
+   * halves the opacity, which is how a real object's contact shadow falls
+   * off. A single large blur reads as a sticker.
+   */
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 12px 2px rgba(0, 0, 0, 0.08),
+    0 8px 16px 4px rgba(0, 0, 0, 0.06),
+    0 12px 24px 6px rgba(0, 0, 0, 0.05),
+    0 16px 32px 10px rgba(0, 0, 0, 0.04),
+    0 24px 48px 16px rgba(0, 0, 0, 0.03),
+    0 32px 64px 24px rgba(0, 0, 0, 0.03);
+}
+
+/*
+ * On a dark page the shadows do nothing and a black phone dissolves into
+ * the background, so the rim does the separating instead — brighter, and
+ * closer to the natural titanium finish.
+ */
+.dark .device {
+  background: linear-gradient(135deg, #9aa0a8 0%, #33383f 100%);
+}
+
+/* The black border between the metal and the pixels. */
+.device-casing {
+  padding: 2cqw;
+  border-radius: 13.6cqw;
+  background: #181818;
+}
+
+.device-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 11.6cqw;
+}
+
+.device-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The casing's own shadow falling on the edge of the glass. */
+.device-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+/*
+ * The Dynamic Island. The simulator photographs the screen rather than the
+ * hardware, so the captures leave a gap for it between the clock and the
+ * status icons — this fills a hole rather than covering anything up.
+ */
+.device-island {
+  position: absolute;
+  top: 2.4cqw;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 27cqw;
+  height: 7.8cqw;
+  border-radius: 999px;
+  background: #000;
+}
+
+/* The front camera, off to one side of the island as it is on the phone. */
+.device-island::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1.6cqw;
+  width: 3.4cqw;
+  height: 3.4cqw;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1d2430 0%, #05070a 70%);
+  box-shadow: inset 0 0 0 0.2cqw rgba(255, 255, 255, 0.07);
+}
+
+/*
+ * The buttons, as fractions of the frame's height. They protrude, so
+ * nothing above them may clip its overflow.
+ */
+.device-button {
+  position: absolute;
+  width: 0.9cqw;
+  border-radius: 0.45cqw;
+  background: linear-gradient(90deg, #4a4a4a 0%, #0d0d0d 100%);
+}
+
+.dark .device-button {
+  background: linear-gradient(90deg, #8a9098 0%, #2b3037 100%);
+}
+
+/* Action button, then the two volume keys. */
+.device-button-action {
+  left: -0.5cqw;
+  top: 15.5%;
+  height: 4.5%;
+}
+
+.device-button-volume-up {
+  left: -0.5cqw;
+  top: 23%;
+  height: 7.5%;
+}
+
+.device-button-volume-down {
+  left: -0.5cqw;
+  top: 32%;
+  height: 7.5%;
+}
+
+/* The side button sits lower, and is longer than either volume key. */
+.device-button-power {
+  right: -0.5cqw;
+  top: 25%;
+  height: 11%;
+}
