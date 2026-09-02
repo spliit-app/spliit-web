@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useAnalytics } from '@/lib/analytics/context'
+import { appStore } from '@/lib/app-store'
 import { useLocalStorageState, useMediaQuery } from '@/lib/hooks'
 import { openCollective } from '@/lib/opencollective'
 // lucide-react v1 dropped its brand icons, so the social marks come from Radix.
@@ -126,11 +127,7 @@ const news: News[] = [
         </p>
         <p className="flex items-center gap-2">
           <Button asChild>
-            <a
-              target="_blank"
-              href="https://apps.apple.com/us/app/spliit-shares-expenses/id6737742507"
-              className="no-underline"
-            >
+            <a target="_blank" href={appStore.url} className="no-underline">
               <ExternalLink className="mr-2 w-4" />
               Download on App Store
             </a>

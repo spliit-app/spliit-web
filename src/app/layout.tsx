@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@/lib/analytics/analytics'
 import { getAnalyticsConfig } from '@/lib/analytics/config'
+import { appStore } from '@/lib/app-store'
 import { effectiveBaseUrl } from '@/lib/env'
 import { TRPCProvider } from '@/trpc/client'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
@@ -53,6 +54,11 @@ export async function generateMetadata(): Promise<Metadata> {
     appleWebApp: {
       capable: true,
       title: 'Spliit',
+    },
+    // Renders the standard iOS Smart App Banner in Safari, offering the native
+    // app to visitors browsing the website on an iPhone or iPad.
+    itunes: {
+      appId: appStore.id,
     },
     applicationName: 'Spliit',
     icons: [
