@@ -14,7 +14,8 @@
   "Footer": {
     "madeIn": "Made in Montréal, Québec 🇨🇦",
     "builtBy": "Built by <author>Sebastien Castiel</author> and <source>contributors</source>",
-    "onOurBlog": "On our blog"
+    "onOurBlog": "On our blog",
+    "iosApp": "iPhone app"
   },
   "PrivacyPolicy": {
     "title": "Privacy Policy",

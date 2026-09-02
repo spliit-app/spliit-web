@@ -66,6 +66,16 @@ export default function HomePage() {
               <Link href="/blog">Read our blog</Link>
             </Button>
           </div>
+          {/* The iOS app has had no route into it from the home page since it
+              shipped — only the news popover, which most people never open. */}
+          <p className="text-sm text-muted-foreground">
+            <Link
+              href="/ios"
+              className="underline decoration-dotted underline-offset-4 hover:text-foreground transition-colors"
+            >
+              Also on iPhone
+            </Link>
+          </p>
           <Suspense fallback={null}>
             <GitHubStarPill />
           </Suspense>

@@ -194,6 +194,11 @@ function Content({ children }: { children: React.ReactNode }) {
             </span>
             <span>
               <Button variant="link" size="sm" asChild className="-ml-3 h-7">
+                <Link href="/ios">{t('Footer.iosApp')}</Link>
+              </Button>
+            </span>
+            <span>
+              <Button variant="link" size="sm" asChild className="-ml-3 h-7">
                 <Link href="/privacy-policy">{t('PrivacyPolicy.title')}</Link>
               </Button>
             </span>
