@@ -14,10 +14,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { github } from '@/lib/github'
+import { openCollective } from '@/lib/opencollective'
 // lucide-react v1 dropped its brand icons, so the GitHub mark comes from Radix.
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import {
+  ArrowRight,
   BarChartHorizontalBig,
+  Building2,
   Calendar,
   CircleDollarSign,
   Divide,
@@ -215,6 +218,54 @@ export default function HomePage() {
               </a>
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/*
+        Open Collective's top tier promises a company's name and logo here, and
+        nobody has taken it yet. The slot is shown empty rather than hidden: an
+        offer no visitor can see sells nothing, and the dashed box is honest
+        about there being no sponsor so far. When the first one signs up, this
+        placeholder becomes the list.
+
+        A contained panel in a plain band, like the iPhone section above: the
+        full-width tinted bands are reserved for the page's own content, and
+        the FAQ below already takes the next one.
+      */}
+      <section className="py-12 md:py-16">
+        <div className="container flex max-w-screen-md flex-col items-center text-center">
+          <h2 className="font-bold text-2xl sm:text-3xl leading-tight">
+            Sponsored by
+          </h2>
+          <p
+            className="mt-2 leading-normal text-muted-foreground sm:text-lg sm:leading-7"
+            style={{ textWrap: 'balance' } as any}
+          >
+            Companies that sponsor Spliit pay for the servers everyone else uses
+            for free. From $200 a month, your name and logo sit here and in the
+            project&rsquo;s README.
+          </p>
+          {/* The whole box is the link, for the same reason the contribute
+              cards are: the label alone is a small target on a phone. */}
+          <a
+            href={openCollective.sponsor}
+            target="_blank"
+            rel="noreferrer"
+            className="group mt-6 w-full max-w-sm border-2 border-dashed rounded-lg p-8 flex flex-col items-center gap-2 hover:border-primary hover:bg-card transition-colors"
+          >
+            <Building2
+              className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors"
+              aria-hidden
+            />
+            <strong className="text-lg">Your company name here</strong>
+            <span className="mt-2 text-sm font-medium text-primary flex items-center gap-1">
+              Become a sponsor
+              <ArrowRight
+                className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                aria-hidden
+              />
+            </span>
+          </a>
         </div>
       </section>
 
