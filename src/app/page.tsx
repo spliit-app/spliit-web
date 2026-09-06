@@ -159,11 +159,16 @@ export default function HomePage() {
         Named by tier rather than by price, so the copy does not go stale the
         day the amount changes on Open Collective.
 
-        Sits here, between the two tinted bands, paired with the iPhone panel
-        below it: both are contained asides rather than part of the page's own
-        pitch, and Features and the FAQ keep the full-width bands.
+        Sits here, between the two tinted bands, ahead of the iPhone panel:
+        both are contained asides rather than part of the page's own pitch, and
+        Features and the FAQ keep the full-width bands.
+
+        Takes the page's standard section padding rather than the tighter one
+        the iPhone panel uses, so the space either side of it matches every
+        other section boundary — and the gap down to that panel stays exactly
+        what it was when Features sat directly above it.
       */}
-      <section className="pt-12 md:pt-16">
+      <section className="py-16 md:py-24 lg:py-32">
         <div className="container flex max-w-screen-md flex-col items-center text-center">
           <h2 className="font-bold text-2xl sm:text-3xl leading-tight">
             Sponsored by
