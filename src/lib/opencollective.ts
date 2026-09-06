@@ -10,12 +10,12 @@ export const openCollective = {
   contribute: `${COLLECTIVE_URL}/contribute`,
   donate: `${COLLECTIVE_URL}/donate`,
   /**
-   * The $200/month “sponsor++” tier — the only one whose reward includes a logo
-   * on this site, which is why the home page links here rather than to the
-   * generic contribute page. Open Collective addresses a tier by slug *and*
-   * numeric ID, so the suffix is part of the URL, not noise.
+   * Where the home page sends a would-be sponsor: the collective page scrolled
+   * to its list of tiers, so the reader sees Sponsor++ — the one whose reward
+   * includes a logo on this site — next to the cheaper options rather than
+   * landing straight in a checkout for it.
    */
-  sponsor: `${COLLECTIVE_URL}/contribute/sponsor-104857`,
+  sponsor: `${COLLECTIVE_URL}#category-CONTRIBUTE`,
   conversations: `${COLLECTIVE_URL}/conversations`,
   newConversation: `${COLLECTIVE_URL}/conversations/new`,
 } as const
