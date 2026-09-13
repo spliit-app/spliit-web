@@ -200,7 +200,7 @@ jobs:
 
       - name: Set up Node.js
         if: steps.gate.outputs.proceed == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node.outputs.version }}
           cache: 'npm'
