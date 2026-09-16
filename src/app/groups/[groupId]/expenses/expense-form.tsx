@@ -46,6 +46,7 @@ import { RuntimeFeatureFlags } from '@/lib/featureFlags'
 import { useActiveUser, useCurrencyRate } from '@/lib/hooks'
 import { randomId } from '@/lib/random'
 import {
+  EXPENSE_NOTES_MAX,
   ExpenseFormInput,
   ExpenseFormValues,
   SplittingOptions,
@@ -172,6 +173,7 @@ export function ExpenseForm({
   group,
   categories,
   expense,
+  expenseId,
   onSubmit,
   onDelete,
   runtimeFeatureFlags,
@@ -179,6 +181,11 @@ export function ExpenseForm({
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
   categories: AppRouterOutput['categories']['list']['categories']
   expense?: AppRouterOutput['groups']['expenses']['get']['expense']
+  /**
+   * The id a new expense will be created with. Only the split preview reads
+   * it; when editing, `expense.id` is used instead.
+   */
+  expenseId?: string
   onSubmit: (value: ExpenseFormValues, participantId?: string) => Promise<void>
   onDelete?: (participantId?: string) => Promise<void>
   runtimeFeatureFlags: RuntimeFeatureFlags
@@ -982,8 +989,13 @@ export function ExpenseForm({
                 <FormItem className="sm:order-6">
                   <FormLabel>{t('notesField.label')}</FormLabel>
                   <FormControl>
-                    <Textarea className="text-base" {...field} />
+                    <Textarea
+                      className="text-base"
+                      maxLength={EXPENSE_NOTES_MAX}
+                      {...field}
+                    />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -1149,14 +1161,13 @@ export function ExpenseForm({
                                       {formatCurrency(
                                         groupCurrency,
                                         calculateShare(id, {
-                                          // A new expense has no id yet — ids
-                                          // are minted server-side — so the
+                                          // The id seeds who takes the
                                           // leftover minor unit of an uneven
-                                          // split may land on a different
-                                          // participant once it is saved. When
-                                          // editing, this makes the amounts
-                                          // here match the balances tab.
-                                          id: expense?.id,
+                                          // split, so passing the one the
+                                          // expense has (or will be created
+                                          // with) makes the amounts here match
+                                          // the balances tab once saved.
+                                          id: expense?.id ?? expenseId,
                                           amount: amountAsMinorUnits(
                                             Number(form.watch('amount')),
                                             groupCurrency,
