@@ -1,6 +1,6 @@
 'use client'
 
-import { Stats, getStatsAction } from '@/app/stats-display-actions'
+import { getStatsAction, Stats } from '@/app/stats-display-actions'
 import { useEffect, useState } from 'react'
 
 export function StatsDisplay() {

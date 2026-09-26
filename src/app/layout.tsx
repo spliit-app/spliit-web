@@ -215,6 +215,10 @@ function Content({ children }: { children: React.ReactNode }) {
           <Suspense fallback={<div>Loading…</div>}>
             <BlogPostsList />
           </Suspense>
+          {/* The feeds are served by a route handler (`blog/feed/[type]`), not
+              a page, so they need a real document request — `next/link` would
+              try to navigate to them client-side. */}
+          {/* eslint-disable nextjs/no-html-link-for-pages */}
           <ul className="flex space-x-2 [&_a]:no-underline mt-2">
             <Button size="sm" variant="secondary" asChild>
               <a href="/blog/feed/rss.xml">RSS</a>
@@ -226,6 +230,7 @@ function Content({ children }: { children: React.ReactNode }) {
               <a href="/blog/feed/feed.json">JSON</a>
             </Button>
           </ul>
+          {/* eslint-enable nextjs/no-html-link-for-pages */}
         </div>
       </footer>
       <Toaster />

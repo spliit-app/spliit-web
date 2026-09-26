@@ -1,7 +1,7 @@
+import { ParsedUrlQuery } from 'querystring'
 import { getBlogIndexWithPosts } from '@/app/blog/[slug]/helpers'
 import { Feed } from 'feed'
 import { notFound } from 'next/navigation'
-import { ParsedUrlQuery } from 'querystring'
 
 export const dynamicParams = false
 
