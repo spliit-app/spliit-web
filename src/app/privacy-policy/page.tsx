@@ -2,7 +2,7 @@ import { getAnalyticsConfig } from '@/lib/analytics/config'
 import { TrackPage } from '@/lib/analytics/track-page'
 import { getRuntimeFeatureFlags } from '@/lib/featureFlags'
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getFormatter, getTranslations } from 'next-intl/server'
 import { ReactNode } from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,6 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t('metaDescription'),
   }
 }
+
+const PROVIDER_NAMES = {
+  plausible: 'Plausible Analytics',
+  umami: 'Umami',
+} as const
 
 /**
  * What this page may truthfully say depends on how the instance serving it is
@@ -35,9 +40,14 @@ export default async function PrivacyPolicy() {
   // at once.
   const offDeviceProviders = providers.filter(({ id }) => id !== 'console')
   const sendsAnalytics = offDeviceProviders.length > 0
-  // Only the Plausible paragraph names a provider, so it is shown only when
-  // Plausible is one of them; what follows it holds for any of them.
-  const usesPlausible = offDeviceProviders.some(({ id }) => id === 'plausible')
+  // The paragraph naming the services is shown only for those it describes;
+  // what follows it holds for any provider.
+  const namedProviders = offDeviceProviders.flatMap(({ id }) =>
+    id in PROVIDER_NAMES
+      ? [PROVIDER_NAMES[id as keyof typeof PROVIDER_NAMES]]
+      : [],
+  )
+  const format = await getFormatter()
   const usesAI = enableReceiptExtract || enableCategoryExtract
 
   const contact = (chunks: ReactNode) => (
@@ -75,7 +85,14 @@ export default async function PrivacyPolicy() {
       <h2>{t('analytics.title')}</h2>
       {sendsAnalytics ? (
         <>
-          {usesPlausible && <p>{t('analytics.provider')}</p>}
+          {namedProviders.length > 0 && (
+            <p>
+              {t('analytics.provider', {
+                names: format.list(namedProviders),
+                count: namedProviders.length,
+              })}
+            </p>
+          )}
           <p>
             {t.rich('analytics.noIds', {
               code: (chunks) => <code>{chunks}</code>,

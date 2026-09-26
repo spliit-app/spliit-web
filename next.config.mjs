@@ -66,10 +66,13 @@ const nextConfig = {
     },
   },
   /**
-   * Serves Plausible from our own origin, so that ad blockers do not drop it.
-   * These replace `withPlausibleProxy()`, which came with next-plausible, and
-   * produce the same two URLs it did. `PLAUSIBLE_SCRIPT_URL` and
-   * `PLAUSIBLE_API_URL` point the analytics provider at them.
+   * Serves Plausible and Umami from our own origin, so that ad blockers do not
+   * drop them and the CSP, which only allows same-origin scripts, lets them
+   * load. The Plausible pair replaces `withPlausibleProxy()`, which came with
+   * next-plausible, and produces the same two URLs it did.
+   * `PLAUSIBLE_SCRIPT_URL` and `PLAUSIBLE_API_URL` point the Plausible provider
+   * at them; `UMAMI_SCRIPT_URL=/js/umami.js` and `UMAMI_HOST_URL=/proxy/umami`
+   * do the same for Umami.
    */
   async rewrites() {
     return [
@@ -80,6 +83,14 @@ const nextConfig = {
       {
         source: '/proxy/api/event',
         destination: 'https://plausible.io/api/event',
+      },
+      {
+        source: '/js/umami.js',
+        destination: 'https://cloud.umami.is/script.js',
+      },
+      {
+        source: '/proxy/umami/api/send',
+        destination: 'https://cloud.umami.is/api/send',
       },
     ]
   },
