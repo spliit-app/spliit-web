@@ -26,7 +26,7 @@
   },
   "PrivacyPolicy": {
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated on August 24, 2026",
+    "lastUpdated": "Last updated on September 26, 2026",
     "metaDescription": "What Spliit stores, what stays on your device, and who else sees it.",
     "intro": "Spliit is a free and open source application for sharing expenses with friends and family, used from a web browser or from the Spliit app for iOS. This policy describes what the application keeps, what leaves your device, and who else sees it. It applies to the instance serving this page: on <link>spliit.app</link> that instance is operated by Sebastien Castiel, and any other one is covered by “Self-hosting” below.",
     "noAccount": {
@@ -48,7 +48,7 @@
     },
     "analytics": {
       "title": "Analytics",
-      "provider": "This instance measures how it is used with Plausible Analytics, which is cookieless, sets no identifier and collects no personal data. It receives the address of the page you are on and a short list of events — a group created, an expense created or deleted, a receipt scanned, and a few more of that kind.",
+      "provider": "This instance measures how it is used with {names}, {count, plural, one {which is cookieless, sets no identifier and collects} other {which are cookieless, set no identifier and collect}} no personal data. {count, plural, one {It receives} other {They receive}} the address of the page you are on and a short list of events — a group created, an expense created or deleted, a receipt scanned, and a few more of that kind.",
       "noIds": "Group and expense identifiers are stripped before anything is sent: a page is reported as <code>/groups/[groupId]/expenses</code> rather than under its real address. That identifier is what gives access to a group, so it never reaches analytics, and no event carries anything you typed.",
       "noTracking": "There is no advertising, no profiling, and no tracking of you across other websites or applications.",
       "disabled": "This instance collects no usage statistics at all."

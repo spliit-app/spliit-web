@@ -16,7 +16,7 @@
   },
   "PrivacyPolicy": {
     "title": "Politique de confidentialité",
-    "lastUpdated": "Dernière mise à jour le 24 août 2026",
+    "lastUpdated": "Dernière mise à jour le 26 septembre 2026",
     "metaDescription": "Ce que Spliit conserve, ce qui reste sur votre appareil, et qui d’autre y a accès.",
     "intro": "Spliit est une application libre et gratuite pour partager des dépenses entre amis ou en famille, utilisable depuis un navigateur web ou depuis l’application Spliit pour iOS. Cette politique décrit ce que l’application conserve, ce qui quitte votre appareil, et qui d’autre y a accès. Elle s’applique à l’instance qui affiche cette page : sur <link>spliit.app</link>, cette instance est exploitée par Sebastien Castiel ; toute autre relève de la section « Héberger sa propre instance » plus bas.",
     "noAccount": {
@@ -38,7 +38,7 @@
     },
     "analytics": {
       "title": "Mesure d’audience",
-      "provider": "Cette instance mesure son utilisation avec Plausible Analytics, qui n’utilise aucun cookie, ne pose aucun identifiant et ne recueille aucune donnée personnelle. Lui sont envoyés l’adresse de la page consultée et une courte liste d’événements — un groupe créé, une dépense créée ou supprimée, un reçu numérisé, et quelques autres du même ordre.",
+      "provider": "Cette instance mesure son utilisation avec {names}, {count, plural, one {qui n’utilise aucun cookie, ne pose aucun identifiant et ne recueille} other {qui n’utilisent aucun cookie, ne posent aucun identifiant et ne recueillent}} aucune donnée personnelle. {count, plural, one {Lui sont envoyés} other {Leur sont envoyés}} l’adresse de la page consultée et une courte liste d’événements — un groupe créé, une dépense créée ou supprimée, un reçu numérisé, et quelques autres du même ordre.",
       "noIds": "Les identifiants de groupe et de dépense sont retirés avant tout envoi : une page est rapportée comme <code>/groups/[groupId]/expenses</code> plutôt que sous son adresse réelle. Cet identifiant est ce qui donne accès à un groupe ; il n’atteint donc jamais la mesure d’audience, et aucun événement ne contient ce que vous avez saisi.",
       "noTracking": "Il n’y a ni publicité, ni profilage, ni suivi de votre activité sur d’autres sites ou applications.",
       "disabled": "Cette instance ne recueille aucune statistique d’utilisation."
