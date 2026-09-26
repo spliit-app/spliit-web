@@ -27,11 +27,17 @@ export default async function PrivacyPolicy() {
     enableReceiptExtract,
     enableCategoryExtract,
   } = await getRuntimeFeatureFlags()
-  const { provider } = await getAnalyticsConfig()
+  const { providers } = await getAnalyticsConfig()
 
   // The `console` provider only prints events to the browser console, so
-  // nothing leaves the device and there is nothing to disclose.
-  const sendsAnalytics = provider === 'plausible'
+  // nothing leaves the device and there is nothing to disclose. Any other
+  // provider does send events off the device, and several can be configured
+  // at once.
+  const offDeviceProviders = providers.filter(({ id }) => id !== 'console')
+  const sendsAnalytics = offDeviceProviders.length > 0
+  // Only the Plausible paragraph names a provider, so it is shown only when
+  // Plausible is one of them; what follows it holds for any of them.
+  const usesPlausible = offDeviceProviders.some(({ id }) => id === 'plausible')
   const usesAI = enableReceiptExtract || enableCategoryExtract
 
   const contact = (chunks: ReactNode) => (
@@ -69,7 +75,7 @@ export default async function PrivacyPolicy() {
       <h2>{t('analytics.title')}</h2>
       {sendsAnalytics ? (
         <>
-          <p>{t('analytics.provider')}</p>
+          {usesPlausible && <p>{t('analytics.provider')}</p>}
           <p>
             {t.rich('analytics.noIds', {
               code: (chunks) => <code>{chunks}</code>,
